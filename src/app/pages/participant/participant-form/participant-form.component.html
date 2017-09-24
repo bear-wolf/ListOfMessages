@@ -1,0 +1,29 @@
+<div class="form container-fluid">
+  <div class="row">
+    <form [formGroup]="participantForm" #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <div class="form-group">
+        <label for="firstName">firstName</label>
+        <input class="form-control" #firstName formGroupName="firstName" id="firstName"/>
+        <div class="message-error" *ngIf="!firstName.value && form.submitted">Заповніть поле</div>
+      </div>
+
+      <div class="form-group">
+        <label for="lastName">lastName</label>
+        <input class="form-control" #lastName formGroupName="lastName" id="lastName">
+        <div class="message-error" *ngIf="!lastName.value && form.submitted">Заповніть поле</div>
+      </div>
+
+      <div class="form-group">
+        <label for="middleName">middleName</label>
+        <input class="form-control" #middleName formGroupName="middleName" id="middleName">
+        <div class="message-error" *ngIf="!middleName.value && form.submitted">Заповніть поле</div>
+      </div>
+
+      <div class="button-group">
+        <button type="submit"
+                class="btn btn-success"
+          >Submit</button>
+      </div>
+    </form>
+  </div>
+</div>

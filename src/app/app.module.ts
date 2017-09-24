@@ -17,6 +17,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { MessageFormComponent } from './pages/message/message-form/message-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ParticipantFormComponent } from './pages/participant/participant-form/participant-form.component';
+import {PartisipantServiceService} from './pages/participant/partisipant-service.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     AttachmentComponent,
     HomeComponent,
     PageNotFoundComponent,
-    MessageFormComponent
+    MessageFormComponent,
+    ParticipantFormComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [DataService],
+  providers: [DataService, PartisipantServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

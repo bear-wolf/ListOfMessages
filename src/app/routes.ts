@@ -5,13 +5,16 @@ import {AttachmentComponent} from './pages/attachment/attachment.component';
 import {HomeComponent} from './pages/home/home.component';
 import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.component';
 import {MessageFormComponent} from './pages/message/message-form/message-form.component';
+import {ParticipantFormComponent} from './pages/participant/participant-form/participant-form.component';
 
 export const appRoutes: Routes = [
     { path: 'messages', component: MessageComponent, children: [
         { path: 'add', component: MessageFormComponent},
         { path: 'edit', component: MessageFormComponent},
     ]},
-    { path: 'participant', component: ParticipantComponent},
+    { path: 'participant', component: ParticipantComponent, children: [
+        { path: 'add', component: ParticipantFormComponent},
+    ]},
     { path: 'attachment', component: AttachmentComponent},
     { path: '', component: HomeComponent},
     { path: '**', component: PageNotFoundComponent }
