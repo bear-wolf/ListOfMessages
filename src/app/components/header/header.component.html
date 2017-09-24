@@ -14,7 +14,7 @@
   <div class="horizontal-menu navbar-collapse element" data-type="module_menu">
     <ul class="nav navbar-nav">
       <li *ngFor="let module of modules">
-        <a [href]="module.url" [innerText]="module.name"></a>
+        <a routerLinkActive="active" [routerLink]="module.url" [innerText]="module.name"></a>
       </li>
     </ul>
   </div>

@@ -1,0 +1,19 @@
+<div class="form container-fluid">
+  <div class="row">
+    <form [formGroup]="messageForm" #form="ngForm" (ngSubmit)="onSubmit(form.value)">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control" formGroupName="name" id="name" />
+      </div>
+
+      <div class="form-group">
+        <label for="name">Description</label>
+        <input class="form-control" formGroupName="description" id="description" required>
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="btn btn-success" [disabled]="!form.form.valid">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
