@@ -1,15 +1,30 @@
 <div class="form container-fluid">
   <div class="row">
-    <form [formGroup]="participantForm" #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <form [formGroup]="participantForm" #form="ngForm" (ngSubmit)="onSubmit(participantForm)">
       <div class="form-group">
         <label for="firstName">firstName</label>
-        <input class="form-control" #firstName formGroupName="firstName" id="firstName"/>
+        <input
+                type="text"
+                placeholder="Your first name"
+                class="form-control"
+                #firstName
+                formGroupName="firstName"
+                id="firstName"/>
+        <div class="">
+          {{ firstName?.errors | json }}
+        </div>
         <div class="message-error" *ngIf="!firstName.value && form.submitted">Заповніть поле</div>
       </div>
 
       <div class="form-group">
         <label for="lastName">lastName</label>
-        <input class="form-control" #lastName formGroupName="lastName" id="lastName">
+        <input
+                class="form-control"
+                #lastName
+                type="text"
+                placeholder="Your last name"
+                formGroupName="lastName"
+                id="lastName">
         <div class="message-error" *ngIf="!lastName.value && form.submitted">Заповніть поле</div>
       </div>
 

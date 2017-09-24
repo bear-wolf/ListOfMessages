@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {PartisipantServiceService} from '../partisipant-service.service';
 import {Participant} from '../../../models/participant';
 
@@ -10,13 +10,14 @@ import {Participant} from '../../../models/participant';
   styleUrls: ['./participant-form.component.css']
 })
 export class ParticipantFormComponent implements OnInit {
-  public participantForm: FormGroup;
+  participantForm: FormGroup;
 
   constructor(
-      private participantService: PartisipantServiceService
+      private participantService: PartisipantServiceService,
+      private fb: FormBuilder
   ) {
 
-    this.participantForm = new FormGroup({
+    this.participantForm = this.fb.group({
       'firstName': new FormControl('',  Validators.required),
       'lastName': new FormControl('',  Validators.required),
       'middleName': new FormControl('',  Validators.required)
