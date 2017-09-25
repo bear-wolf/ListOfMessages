@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {PartisipantServiceService} from '../partisipant-service.service';
+import {ParticipantService} from '../participant.service';
 import {Participant} from '../../../models/participant';
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -13,29 +14,28 @@ export class ParticipantFormComponent implements OnInit {
   participantForm: FormGroup;
 
   constructor(
-      private participantService: PartisipantServiceService,
+      private participantService: ParticipantService,
+      private router: Router,
       private fb: FormBuilder
   ) {
 
     this.participantForm = this.fb.group({
-      'firstName': new FormControl('',  Validators.required),
-      'lastName': new FormControl('',  Validators.required),
-      'middleName': new FormControl('',  Validators.required)
+      'firstName': [''],
+      'lastName': [''],
+      'middleName': ['']
     })
   }
 
   ngOnInit() {
   }
 
-  onSubmit(form) {
-    console.log(form);
-    if (form.valid) {
-      let user,
-          value = form.value;
+  onSubmit(value, valid) {
+    if (valid) {
+      let user = new Participant(value.firstName, value.lastName, value.middleName);
 
-      user = new Participant(value.firstName, value.lastName, value.middleName);
-
-      this.participantService.save(user)
+      this.participantService.save(user).subscribe(()=>{
+        this.router.navigate(['/participant']);
+      })
     }
   }
 }

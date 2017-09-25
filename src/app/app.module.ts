@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { MomentModule } from 'angular2-moment';
 // import {FORM_PROVIDERS} from '@angular/common';
 
 import { AppComponent } from './pages/layout/app.component';
@@ -18,7 +19,7 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { MessageFormComponent } from './pages/message/message-form/message-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ParticipantFormComponent } from './pages/participant/participant-form/participant-form.component';
-import {PartisipantServiceService} from './pages/participant/partisipant-service.service';
+import {ParticipantService} from './pages/participant/participant.service';
 
 @NgModule({
   declarations: [
@@ -36,10 +37,11 @@ import {PartisipantServiceService} from './pages/participant/partisipant-service
   imports: [
     BrowserModule,
     FormsModule,
+    MomentModule,
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [DataService, PartisipantServiceService],
+  providers: [DataService, ParticipantService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

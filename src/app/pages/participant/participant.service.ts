@@ -1,19 +1,22 @@
 import { Injectable } from '@angular/core';
 import {Participant} from '../../models/participant';
+import {Observable} from "rxjs";
 
 @Injectable()
-export class PartisipantServiceService {
+export class ParticipantService {
 
   private participant: Array<Participant> = [];
 
   constructor() { }
 
-  getAll() {
-    return this.participant;
+  public getAll() {
+    return Observable.of(this.participant);
   }
 
-  save(data: Participant) {
+  public save(data: Participant) {
     this.participant.push(data);
+
+    return Observable.of(this.participant);
   }
 
 }

@@ -1,44 +1,75 @@
-<div class="form container-fluid">
-  <div class="row">
-    <form [formGroup]="participantForm" #form="ngForm" (ngSubmit)="onSubmit(participantForm)">
-      <div class="form-group">
-        <label for="firstName">firstName</label>
-        <input
-                type="text"
-                placeholder="Your first name"
-                class="form-control"
-                #firstName
-                formGroupName="firstName"
-                id="firstName"/>
-        <div class="">
-          {{ firstName?.errors | json }}
+<div class="container-fluid">
+  <div class="form">
+    <div class="row">
+      <form [formGroup]="participantForm" novalidate #form="ngForm" (ngSubmit)="onSubmit(participantForm.value, participantForm.valid)">
+
+        <div class="row">
+          <div class="col-sm-3">
+            <label for="firstName">Имя</label>
+          </div>
+          <div class="col-sm-9">
+            <input
+                    type="text"
+                    placeholder="Your first name"
+                    class="form-control"
+                    #firstName
+                    formControlName="firstName"
+                    id="firstName"/>
+
+            <div class="">
+              {{ firstName?.errors | json }}
+            </div>
+            <div class="message-error" *ngIf="!firstName.value && form.submitted">Заповніть поле</div>
+          </div>
         </div>
-        <div class="message-error" *ngIf="!firstName.value && form.submitted">Заповніть поле</div>
-      </div>
 
-      <div class="form-group">
-        <label for="lastName">lastName</label>
-        <input
-                class="form-control"
-                #lastName
-                type="text"
-                placeholder="Your last name"
-                formGroupName="lastName"
-                id="lastName">
-        <div class="message-error" *ngIf="!lastName.value && form.submitted">Заповніть поле</div>
-      </div>
+        <div class="row">
+          <div class="col-sm-3">
+            <label for="lastName">Фамилия</label>
+          </div>
+          <div class="col-sm-9">
+            <input
+                    class="form-control"
+                    #lastName
+                    type="text"
+                    placeholder="Your last name"
+                    formControlName="lastName"
+                    id="lastName">
+            <div class="message-error" *ngIf="!lastName.value && form.submitted">Заповніть поле</div>
+          </div>
+        </div>
 
-      <div class="form-group">
-        <label for="middleName">middleName</label>
-        <input class="form-control" #middleName formGroupName="middleName" id="middleName">
-        <div class="message-error" *ngIf="!middleName.value && form.submitted">Заповніть поле</div>
-      </div>
+        <div class="row">
+          <div class="col-sm-3">
+            <label for="middleName">Отчество</label>
+          </div>
+          <div class="col-sm-9">
+            <input  type="text"
+                    class="form-control"
+                    #middleName
+                    formControlName="middleName"
+                    id="middleName">
+            <div class="message-error" *ngIf="!middleName.value && form.submitted">Заповніть поле</div>
+          </div>
+        </div>
 
-      <div class="button-group">
-        <button type="submit"
-                class="btn btn-success"
-          >Submit</button>
-      </div>
-    </form>
+        <div class="row">
+          <div class="col-sm-3">
+          </div>
+          <div class="col-sm-9">
+            <div class="button-group">
+              <button type="submit"
+                      class="btn btn-success"
+              >Submit</button>
+              <button type="submit"
+                      class="btn btn-default"
+                      [routerLink]="['/participant']"
+              >Cancel</button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
   </div>
 </div>
