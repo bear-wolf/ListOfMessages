@@ -18,6 +18,7 @@ import { MessageFormComponent } from './pages/message/message-form/message-form.
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UserService} from './modules/user/user-service.service';
 import {UserModule} from './modules/user/user.module';
+import {TranslatePipe} from './modules/shared/translate/translate.pipe';
 
 @NgModule({
   declarations: [

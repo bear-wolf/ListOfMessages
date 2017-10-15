@@ -2,7 +2,8 @@
   <div class="row">
     <form [formGroup]="participantForm" #form="ngForm" (ngSubmit)="onSubmit(participantForm)">
       <div class="form-group">
-        <label for="firstName">firstName</label>
+        <label for="firstName"
+               [innerText]="'firstName'"></label>
         <input
                 type="text"
                 placeholder="Your first name"
@@ -17,7 +18,8 @@
       </div>
 
       <div class="form-group">
-        <label for="lastName">lastName</label>
+        <label for="lastName"
+               [innerText]="'lastName'"></label>
         <input
                 class="form-control"
                 #lastName
@@ -29,7 +31,8 @@
       </div>
 
       <div class="form-group">
-        <label for="middleName">middleName</label>
+        <label for="middleName"
+               [innerText]="'middleName'"></label>
         <input class="form-control" #middleName formGroupName="middleName" id="middleName">
         <div class="message-error" *ngIf="!middleName.value && form.submitted">Заповніть поле</div>
       </div>
