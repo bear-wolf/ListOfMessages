@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Participant} from '../../models/participant';
+import {Participant} from '../../models/users';
 
 @Injectable()
 export class PartisipantServiceService {

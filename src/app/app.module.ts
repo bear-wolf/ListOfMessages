@@ -11,14 +11,13 @@ import { DataService } from './services/data.service';
 import { LeftPanelComponent } from './components/left-panel/left.panel.component';
 import {appRoutes} from "./routes";
 import { MessageComponent } from './pages/message/message.component';
-import { ParticipantComponent } from './pages/participant/participant.component';
 import { AttachmentComponent } from './pages/attachment/attachment.component';
 import { HomeComponent } from './pages/home/home.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { MessageFormComponent } from './pages/message/message-form/message-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { ParticipantFormComponent } from './pages/participant/participant-form/participant-form.component';
-import {PartisipantServiceService} from './pages/participant/partisipant-service.service';
+import {PartisipantServiceService} from './modules/user/user-service.service';
+import {UserModule} from './modules/user/user.module';
 
 @NgModule({
   declarations: [
@@ -26,14 +25,15 @@ import {PartisipantServiceService} from './pages/participant/partisipant-service
     HeaderComponent,
     LeftPanelComponent,
     MessageComponent,
-    ParticipantComponent,
     AttachmentComponent,
     HomeComponent,
     PageNotFoundComponent,
     MessageFormComponent,
-    ParticipantFormComponent
+
   ],
   imports: [
+    UserModule,
+
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,

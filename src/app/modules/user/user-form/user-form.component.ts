@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {PartisipantServiceService} from '../partisipant-service.service';
-import {Participant} from '../../../models/participant';
+import {PartisipantServiceService} from '../user-service.service';
+import {Participant} from '../../../models/users';
 
 
 @Component({
-  selector: 'app-participant-form',
-  templateUrl: './participant-form.component.html',
-  styleUrls: ['./participant-form.component.css']
+  selector: 'app-user-form',
+  templateUrl: './user-form.component.html',
+  styleUrls: ['./user-form.component.css']
 })
-export class ParticipantFormComponent implements OnInit {
+export class UserFormComponent implements OnInit {
   participantForm: FormGroup;
 
   constructor(
