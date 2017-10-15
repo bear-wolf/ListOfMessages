@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {PartisipantServiceService} from '../user-service.service';
-import {Participant} from '../../../models/users';
+import {UserService} from '../user-service.service';
+import {User} from '../user-model';
 
 
 @Component({
@@ -13,7 +13,7 @@ export class UserFormComponent implements OnInit {
   participantForm: FormGroup;
 
   constructor(
-      private participantService: PartisipantServiceService,
+      private userService: UserService,
       private fb: FormBuilder
   ) {
 
@@ -33,9 +33,9 @@ export class UserFormComponent implements OnInit {
       let user,
           value = form.value;
 
-      user = new Participant(value.firstName, value.lastName, value.middleName);
+      user = new User(value.firstName, value.lastName, value.middleName);
 
-      this.participantService.save(user)
+      this.userService.save(user)
     }
   }
 }

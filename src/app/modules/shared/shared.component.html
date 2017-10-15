@@ -10,6 +10,29 @@
 
       <router-outlet></router-outlet>
 
+      <div class="block-output" *ngIf="participants.length">
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <td>#</td>
+                <td>Имя</td>
+                <td>Фамилия</td>
+                <td>Отчество</td>
+                <td>дата создания</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let participant of participants; let i = index;">
+                <td [innerText]="i"></td>
+                <td [innerText]="participant.firstName"></td>
+                <td [innerText]="participant.lastName"></td>
+                <td [innerText]="participant.middleName"></td>
+                <td [innerText]="participant.dataCreate"></td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+
     </div>
   </div>
 </section>

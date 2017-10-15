@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import {Participant} from '../../models/users';
+import {User} from './user-model';
 
 @Injectable()
-export class PartisipantServiceService {
+export class UserService {
 
-  private participant: Array<Participant> = [];
+  private user: Array<User> = [];
 
   constructor() { }
 
   getAll() {
-    return this.participant;
+    return this.user;
   }
 
-  save(data: Participant) {
-    this.participant.push(data);
+  save(data: User) {
+    this.user.push(data);
   }
 
 }

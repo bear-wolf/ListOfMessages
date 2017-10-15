@@ -16,7 +16,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { MessageFormComponent } from './pages/message/message-form/message-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {PartisipantServiceService} from './modules/user/user-service.service';
+import {UserService} from './modules/user/user-service.service';
 import {UserModule} from './modules/user/user.module';
 
 @NgModule({
@@ -39,7 +39,7 @@ import {UserModule} from './modules/user/user.module';
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [DataService, PartisipantServiceService],
+  providers: [DataService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
