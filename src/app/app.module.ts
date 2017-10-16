@@ -18,7 +18,10 @@ import { MessageFormComponent } from './pages/message/message-form/message-form.
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UserService} from './modules/user/user-service.service';
 import {UserModule} from './modules/user/user.module';
-import {TranslatePipe} from './modules/shared/translate/translate.pipe';
+import {TranslateModule} from './modules/translate/translate.module';
+import {TranslateService} from './modules/shared/translate/translate.service';
+import {BaseService} from './modules/shared/base.service';
+import {Http, HttpModule} from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -34,13 +37,15 @@ import {TranslatePipe} from './modules/shared/translate/translate.pipe';
   ],
   imports: [
     UserModule,
+    TranslateModule,
 
+    HttpModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [DataService, UserService],
+  providers: [DataService, UserService, TranslateService, BaseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

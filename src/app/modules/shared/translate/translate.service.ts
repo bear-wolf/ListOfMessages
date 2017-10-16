@@ -19,7 +19,9 @@ export class TranslateService  {
   // inject our translations
   constructor(public baseService: BaseService) {
     this.baseService.getTranslateAll().subscribe((data) => {
-      this._translations.ua = data.json();
+      if (data.length) {
+          this._translations.ua = data.json();
+      }
     });
   }
 

@@ -30,7 +30,7 @@ route.prototype.init = function () {
         object.addHeader(res);
 
         if (req.method == 'OPTIONS') {
-            //res.setHeader('Access-Control-Allow-Headers', ''); // Request methods you wish to allow
+            res.setHeader('Access-Control-Allow-Headers', ''); // Request methods you wish to allow
             res.statusCode = 200;
             res.end('');
         } else next();

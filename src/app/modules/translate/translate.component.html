@@ -1,0 +1,16 @@
+<section class="panel">
+  <header class="panel-heading"
+    [innerText]="'translate'"></header>
+  <div class="panel-body">
+    <div class="btn-section clearfix">
+      <div class="btn-group">
+        <button class="btn btn-primary"
+                [routerLink]="'add'"
+                [innerText]="'global.add'"></button>
+      </div>
+
+      <router-outlet></router-outlet>
+
+    </div>
+  </div>
+</section>

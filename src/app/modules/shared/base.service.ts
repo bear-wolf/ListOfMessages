@@ -15,20 +15,22 @@ export class BaseService {
     let headers;
     headers = new Headers();
     // switch (window.location.hash) {
-    //   case '#ru': { headers.append('Accept-Language', 'ru'); break; }
-    //   case '#uk': { headers.append('Accept-Language', 'uk'); break; }
-    //   case '#en': { headers.append('Accept-Language', 'en'); break; }
+    //   // case '#ru': { headers.append('Accept-Language', 'ru'); break; }
+    //   // case '#uk': { headers.append('Accept-Language', 'uk'); break; }
+    //   // case '#en': { headers.append('Accept-Language', 'en'); break; }
     //   default: {
     //     headers.append('Accept-Language', 'uk');
     //     break;
     //   }
     // }
-      debugger;
 
-    return this.http.get(this.host + '/translate', {
-      headers: headers
-    });
+    headers.append('Accept-Language', 'uk');
 
+    // return this.http.get(this.host + '/translate', {
+    //   headers: headers
+    // });
+
+    return Observable.of([]);
   }
 
   getContent(key: string) {

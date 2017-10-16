@@ -12,6 +12,7 @@ export class DataService {
     this.modules.push(new Modules('Cообщения', 'messages'));
     this.modules.push(new Modules('Участники', 'users'));
     this.modules.push(new Modules('Вложения', 'attachment'));
+    this.modules.push(new Modules('Переводы', 'translate'));
   }
 
   getModules(): Observable<Modules> {
