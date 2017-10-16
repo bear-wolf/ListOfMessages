@@ -3,7 +3,9 @@
  */
 var mainController = require('./controller/mainController'),
     translateController = require('./controller/translateController'),
-    config = require('./config');
+    config = require('./config'),
+    MongoClient = require('mongodb').MongoClient,
+    Server = require('mongodb').Server;
 
 var route = function () {}
 route.prototype.addHeader = function(res) {
@@ -17,6 +19,12 @@ route.prototype.isAuth = function () {
 },
 route.prototype.init = function () {
     var object = this;
+
+    MongoClient.connect('mongodb://localhost:27017/test_message', function(err,database) {
+        if(err) { console.error(err) }
+        this.db = database // once connected, assign the connection to the global variable
+    })
+
 
     object.app.use(function (req, res, next) {
         object.addHeader(res);
@@ -36,6 +44,16 @@ route.prototype.init = function () {
 
     object.app.get('/translate', function (req, res) {
         (new translateController(res)).get();
+    });
+
+    object.app.post('/translate/save', function (req, res) {
+        (new translateController(res, db)).save();
+    });
+    object.app.post('/translate/update', function (req, res) {
+        (new translateController(res, db)).update();
+    });
+    object.app.post('/translate/remove', function (req, res) {
+        (new translateController(res, db)).remove();
     });
 
     // object.app.get('/login', function (req, res, next) {
