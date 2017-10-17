@@ -7,9 +7,9 @@ var fileOfData = 'data.json',
     crypto = require('crypto'),
     fs = require('fs');
 
-var mainController = function (resource) {
+var mainController = function (resource, db) {
     this.resource = resource;
-    this.db = data;
+    this.db = db;
     this.fs = fs;
 }
 
@@ -27,28 +27,35 @@ mainController.prototype.index = function () {
 //     })
 // }
 
-mainController.prototype.removeById = function (id) {
-    var data,
-        label = false,
+mainController.prototype.install = function () {
+    var data = {},
         object = this,
-        users = this.db.user,
-        arrLength = users.length;
+        tables = ['translate', 'attachment', 'user', 'message'];
 
-    for (var key = 0; key < arrLength; key++) {
-        if (users[key].id == id) {
-            users.splice(key, 1);
-            label = true;
-            break;
+    db.listCollections().toArray(function(err, collections){
+        if (err) {
+            data.status = false;
+            object.resource.writeHead(404);
+            object.resource.end(JSON.stringify(data));
         }
-    }
 
-    if (label) {
-        data = {
-            status: true
+        if (collections.length) {
+            data.status = false;
+            data.message = 'The tables there is in base data';
+        } else {
+            data.status = true;
+
+            for (var i=0; i<=tables.length; i++) {
+                object.db.createCollection(tables[i]);
+            }
+            data.messagge= 'Create is '+ tables.length +' tables';
         }
+
         object.resource.writeHead(200);
         object.resource.end(JSON.stringify(data));
-    }
+    });
+
+
 }
 mainController.prototype.get = function () {
     var data,
@@ -71,68 +78,68 @@ mainController.prototype.get = function () {
     object.resource.end(JSON.stringify(data));
 }
 
-mainController.prototype.getCredentials = function (data) {
-    var object = this,
-        user = null,
-        headerResponse = {
-            'Content-Type': 'application/json'
-        },
-        arrLength = this.db.user.length,
-        users = this.db.user;
-
-    for (var key = 0; key < arrLength; key++) {
-        if (users[key].email == data.email && users[key].password == data.password && users[key].status ==1) {
-            user = users[key];
-            break;
-        }
-    }
-
-    if (user) {
-        var token = crypto.randomBytes(256).toString('hex') // Synchronous
-
-        if (!process.token) {
-            process.token = [];
-            process.token.push(token);
-        }
-
-        data = {
-            token : token,
-            body : user,
-            status: true
-        }
-        object.resource.writeHead(200, headerResponse);
-        object.resource.end(JSON.stringify(data));
-    } else {
-        object.resource.writeHead(401, headerResponse);
-        object.resource.end(JSON.stringify({
-            status: false,
-            message: 'User is not administrator'
-        }));
-    }
-    return user;
-}
-
-mainController.prototype.getById = function (id){
-    var data,
-        object = this,
-        list = [],
-        arrLength = this.db.user.length,
-        users = this.db.user;
-
-    for (var key = 0; key < arrLength; key++) {
-        if (!users[key].status && users[key].id == id) {
-            list.push(users[key]);
-            break;
-        }
-    }
-
-    data = {
-        body : list[0],
-        status: true
-    }
-    object.resource.writeHead(200);
-    object.resource.end(JSON.stringify(data));
-}
+// mainController.prototype.getCredentials = function (data) {
+//     var object = this,
+//         user = null,
+//         headerResponse = {
+//             'Content-Type': 'application/json'
+//         },
+//         arrLength = this.db.user.length,
+//         users = this.db.user;
+//
+//     for (var key = 0; key < arrLength; key++) {
+//         if (users[key].email == data.email && users[key].password == data.password && users[key].status ==1) {
+//             user = users[key];
+//             break;
+//         }
+//     }
+//
+//     if (user) {
+//         var token = crypto.randomBytes(256).toString('hex') // Synchronous
+//
+//         if (!process.token) {
+//             process.token = [];
+//             process.token.push(token);
+//         }
+//
+//         data = {
+//             token : token,
+//             body : user,
+//             status: true
+//         }
+//         object.resource.writeHead(200, headerResponse);
+//         object.resource.end(JSON.stringify(data));
+//     } else {
+//         object.resource.writeHead(401, headerResponse);
+//         object.resource.end(JSON.stringify({
+//             status: false,
+//             message: 'User is not administrator'
+//         }));
+//     }
+//     return user;
+// }
+//
+// mainController.prototype.getById = function (id){
+//     var data,
+//         object = this,
+//         list = [],
+//         arrLength = this.db.user.length,
+//         users = this.db.user;
+//
+//     for (var key = 0; key < arrLength; key++) {
+//         if (!users[key].status && users[key].id == id) {
+//             list.push(users[key]);
+//             break;
+//         }
+//     }
+//
+//     data = {
+//         body : list[0],
+//         status: true
+//     }
+//     object.resource.writeHead(200);
+//     object.resource.end(JSON.stringify(data));
+// }
 
 mainController.prototype.save = function (data) {
     var json,

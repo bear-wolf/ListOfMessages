@@ -20,7 +20,7 @@ route.prototype.isAuth = function () {
 route.prototype.init = function () {
     var object = this;
 
-    MongoClient.connect('mongodb://localhost:27017/test_message', function(err,database) {
+    MongoClient.connect('mongodb://localhost:27017/dbMessage', function(err,database) {
         if(err) { console.error(err) }
         this.db = database // once connected, assign the connection to the global variable
     })
@@ -41,6 +41,11 @@ route.prototype.init = function () {
         res.send('GET request to the homepage, hello');
         res.end('');
     });
+
+    object.app.get('/install', function (req, res) {
+        (new mainController(res, db)).install();
+    });
+
 
     object.app.get('/translate', function (req, res) {
         (new translateController(res)).get();
