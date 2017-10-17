@@ -1,6 +1,6 @@
-<div class="form container-fluid">
-  <div class="row">
-    <form [formGroup]="translateForm" #form="ngForm" (ngSubmit)="onSubmit(translateForm)">
+<div class="container-fluid">
+  <form [formGroup]="translateForm" #form="ngForm" (ngSubmit)="onSubmit(translateForm)">
+    <div class="row">
       <div class="form-group">
         <label for="key"
                [innerText]="'key'"></label>
@@ -16,7 +16,9 @@
         </div>
         <div class="message-error" *ngIf="!key.value && form.submitted">Заповніть поле</div>
       </div>
+    </div>
 
+    <div class="row">
       <div class="form-group">
         <label for="value"
                [innerText]="'value'"></label>
@@ -29,11 +31,13 @@
                 id="value">
         <div class="message-error" *ngIf="!value.value && form.submitted">Заповніть поле</div>
       </div>
+    </div>
 
+    <div class="row">
       <div class="button-group">
         <button type="submit"
                 class="btn btn-success">Submit</button>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
 </div>
