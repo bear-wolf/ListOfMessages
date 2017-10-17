@@ -1,15 +1,15 @@
 <section class="panel">
-  <header class="panel-heading">
-    Участники
+  <header class="panel-heading"
+          [innerText]="'Участники'">
   </header>
   <div class="panel-body">
     <div class="btn-section clearfix">
       <div class="btn-group">
-        <button class="btn btn-primary" [routerLink]="'add'">Добавить</button>
+        <button class="btn btn-primary"
+                [routerLink]="'add'"
+                [innerText]="'Add'"></button>
       </div>
-
-      <router-outlet></router-outlet>
-
     </div>
+    <router-outlet></router-outlet>
   </div>
 </section>
