@@ -15,8 +15,10 @@ http.createServer(app).listen(app.get('port'), function () {
     console.log('Express server listening on port '+ app.get('port'));
     var route = new routes();
 
-    app.use(bodyParser.urlencoded({ extended: false }))
-    app.use(bodyParser.json()) // parse application/json
+    // app.use(bodyParser.urlencoded({
+    //     extended: true
+    // }))
+    // app.use(bodyParser.json()) // parse application/json
 
     route.app = app;
     route.express = express;

@@ -5,7 +5,8 @@ var mainController = require('./controller/mainController'),
     translateController = require('./controller/translateController'),
     config = require('./config'),
     MongoClient = require('mongodb').MongoClient,
-    Server = require('mongodb').Server;
+    Server = require('mongodb').Server,
+    bodyParser = require('body-parser');
 
 var route = function () {}
 route.prototype.addHeader = function(res) {
@@ -51,7 +52,10 @@ route.prototype.init = function () {
         (new translateController(res)).get();
     });
 
-    object.app.post('/translate/save', function (req, res) {
+    var urlencodedParser = bodyParser.urlencoded({ extended: true })
+    var jsonParser = bodyParser.json();
+    object.app.post('/translate/save', urlencodedParser, function (req, res) {
+        if (!req.body) return res.sendStatus(400)
         (new translateController(res, db)).save();
     });
     object.app.post('/translate/update', function (req, res) {
