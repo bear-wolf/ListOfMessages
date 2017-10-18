@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {TranslateService} from '../../shared/translate/translate.service';
+import {Translate} from "../../../models/translate";
 
 @Component({
   selector: 'app-translate-form',
@@ -24,15 +25,13 @@ export class TranslateFormComponent implements OnInit {
   ngOnInit() {
   }
 
-    onSubmit(form) {
-        // console.log(form);
-        // if (form.valid) {
-        //     let user,
-        //         value = form.value;
-        //
-        //     user = new User(value.firstName, value.lastName, value.middleName);
-        //
-        //     this.translateService.save(user)
-        // }
+    onSubmit(value, valid) {
+        if (valid) {
+            this.translateService
+                .save(new Translate(value.key, value.value))
+                .subscribe((data)=>{
+                    debugger;
+                })
+        }
     }
 }
