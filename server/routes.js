@@ -3,9 +3,8 @@
  */
 var mainController = require('./controller/mainController'),
     translateController = require('./controller/translateController'),
+    mongoController = require('./controller/mongoController.js'),
     config = require('./config'),
-    MongoClient = require('mongodb').MongoClient,
-    Server = require('mongodb').Server,
     bodyParser = require('body-parser');
 
 var route = function () {}
@@ -19,13 +18,10 @@ route.prototype.isAuth = function () {
 
 },
 route.prototype.init = function () {
-    var object = this;
+    var mongoCtrl,
+        object = this;
 
-    MongoClient.connect('mongodb://localhost:27017/dbMessage', function(err,database) {
-        if(err) { console.error(err) }
-        this.db = database // once connected, assign the connection to the global variable
-    })
-
+    mongoCtrl = new mongoController(config);
 
     object.app.use(function (req, res, next) {
         object.addHeader(res);
@@ -44,7 +40,9 @@ route.prototype.init = function () {
     });
 
     object.app.get('/install', function (req, res) {
-        (new mainController(res, db)).install();
+        mongoCtrl.setParams({
+            response: res
+        }).install();
     });
 
 
@@ -55,8 +53,10 @@ route.prototype.init = function () {
     var urlencodedParser = bodyParser.urlencoded({ extended: true })
     var jsonParser = bodyParser.json();
     object.app.post('/translate/save', urlencodedParser, function (req, res) {
-        if (!req.body) return res.sendStatus(400)
-        (new translateController(res, db)).save();
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        (new translateController(res)).save(req.body);
     });
     object.app.post('/translate/update', function (req, res) {
         (new translateController(res, db)).update();

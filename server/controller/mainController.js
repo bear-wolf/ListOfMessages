@@ -27,36 +27,6 @@ mainController.prototype.index = function () {
 //     })
 // }
 
-mainController.prototype.install = function () {
-    var data = {},
-        object = this,
-        tables = ['translate', 'attachment', 'user', 'message'];
-
-    db.listCollections().toArray(function(err, collections){
-        if (err) {
-            data.status = false;
-            object.resource.writeHead(404);
-            object.resource.end(JSON.stringify(data));
-        }
-
-        if (collections.length) {
-            data.status = false;
-            data.message = 'The tables there is in base data';
-        } else {
-            data.status = true;
-
-            for (var i=0; i<=tables.length; i++) {
-                object.db.createCollection(tables[i]);
-            }
-            data.messagge= 'Create is '+ tables.length +' tables';
-        }
-
-        object.resource.writeHead(200);
-        object.resource.end(JSON.stringify(data));
-    });
-
-
-}
 mainController.prototype.get = function () {
     var data,
         object = this,

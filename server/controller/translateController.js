@@ -1,12 +1,12 @@
-var fileOfData = 'data.json',
+var mongoController = require('./mongoController.js'),
+    fileOfData = 'data.json',
     data = require('./../'+ fileOfData),
     fs = require('fs');
 
-var translateController = function (resource, db) {
+var translateController = function (resource) {
     this.resource = resource;
-    this.db = db;
+    this.mongoCtrl = (new mongoController);
     this.fs = fs;
-    this.collection = this.db.collection('translate');
 }
 
 translateController.prototype.index = function () {
@@ -15,22 +15,25 @@ translateController.prototype.index = function () {
 }
 
 translateController.prototype.save = function (data) {
-    var _data,
+    var _data = {},
         object = this;
 
-    _data = {
-        status: true
-    };
-
-    this.collection.save(data).toArray(function(err, docs) {
-        if (err) {
-            _data.status = false;
-        } else {
-            _data.body = docs;
-            _data.length = docs.length;
+    this.mongoCtrl.connect(function (db) {
+        if (!db) {
+            object.resource.end(404);
+            return;
         }
+        var collection = db.collection('translate');
 
-        object.resource.end(JSON.stringify(_data));
+        collection.insertOne(data, function(err, docs) {
+            if (err) {
+                _data.status = false;
+            } else {
+                _data.status = true;
+            }
+
+            object.resource.end(JSON.stringify(_data));
+        });
     });
 }
 
