@@ -1,0 +1,8 @@
+.alert{
+    position: relative;
+}
+.alert .todo-remove{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
