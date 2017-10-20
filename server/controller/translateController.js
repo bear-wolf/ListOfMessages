@@ -7,6 +7,7 @@ var translateController = function (resource) {
     this.resource = resource;
     this.mongoCtrl = (new mongoController);
     this.fs = fs;
+    this.entity = 'translate';
 }
 
 translateController.prototype.index = function () {
@@ -14,97 +15,103 @@ translateController.prototype.index = function () {
     // this.resource.end('this is index page');
 }
 
-translateController.prototype.save = function (data) {
+translateController.prototype.save = function (json) {
     var _data = {},
-        object = this;
+        _this = this;
 
-    this.mongoCtrl.connect(function (db) {
-        if (!db) {
-            object.resource.end(404);
+    this.mongoCtrl.connect(function (data) {
+        if (!data.status) {
+            _this.resource.end(404);
             return;
         }
-        var collection = db.collection('translate');
+        var collection = data.db.collection(_this.entity);
 
-        collection.insertOne(data, function(err, docs) {
+        var callback = function (err, result) {
             if (err) {
                 _data.status = false;
-            } else {
+            } else{
                 _data.status = true;
             }
 
-            object.resource.end(JSON.stringify(_data));
-        });
+            data.db.close();
+
+            _this.resource.end(JSON.stringify(_data));
+        }
+
+        if (json.id) {
+            // update
+            collection.updateOne( {
+                    '_id': json.id
+                },
+                {
+                    $set: json
+                },
+                true, callback
+            );
+        } else {
+            collection.insertOne(json, callback); //insert
+        }
     });
 }
 
 translateController.prototype.get = function () {
-    var data = {
-            count: 0
-        },
-        object = this;
+    var _this = this;
 
-    this.mongoCtrl.connect(function (db) {
-        if (!db) {
-            object.resource.end(404);
+    this.mongoCtrl.connect(function (data) {
+        var _data;
+
+        _data = {
+            count: 0
+        };
+
+        if (!data.status) {
+            _this.resource.end(JSON.stringify(data));
             return;
         }
-        var collection = db.collection('translate');
+        var collection = data.db.collection(this.entity);
 
         collection.find().toArray(function(err, docs) {
             if (err) {
-                data.status = false;
+                _data.status = false;
             } else {
-                data.status = true;
-                data.body = docs;
-                data.count = docs.length
+                _data.status = true;
+                _data.body = docs;
+                _data.count = docs.length
             }
 
-            object.resource.end(JSON.stringify(data));
-            db.close();
+            data.db.close();
+            _this.resource.end(JSON.stringify(_data));
         });
     });
 }
 
-translateController.prototype.update = function (data) {
-    var data,
-        object = this;
 
-    data = {
-        status: false
-    };
+translateController.prototype.remove = function (json) {
+    var _this = this;
 
-    // this.collection.find().toArray(function(err, docs) {
-    //     if (err) {
-    //         data.status = false;
-    //     } else {
-    //         data.body = docs;
-    //         data.length = docs.length;
-    //     }
-    //
-    //     object.resource.end(JSON.stringify(data));
-    // });
-    object.resource.end(JSON.stringify(data));
-}
+    this.mongoCtrl.connect(function (data) {
+        var collection,
+            _data = {};
 
-translateController.prototype.remove = function (data) {
-    var data,
-        object = this;
+        if (!data.status) {
+            _this.resource.end(404);
+        } else {
+            data.db.collection(_this.entity).remove( {
+                "_id": json.id
+            },
+            function (err, result) {
+            if (err) {
+                _data.status = false;
+            } else{
+                _data.status = true;
+            }
 
-    data = {
-        status: false
-    };
+            data.db.close();
 
-    // this.collection.find().toArray(function(err, docs) {
-    //     if (err) {
-    //         data.status = false;
-    //     } else {
-    //         data.body = docs;
-    //         data.length = docs.length;
-    //     }
-    //
-    //     object.resource.end(JSON.stringify(data));
-    // });
-    object.resource.end(JSON.stringify(data));
+            _this.resource.end(JSON.stringify(_data));
+        });
+        }
+    });
 }
 
 module.exports = translateController;

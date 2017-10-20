@@ -58,11 +58,11 @@ route.prototype.init = function () {
         }
         (new translateController(res)).save(req.body);
     });
-    object.app.post('/translate/update', function (req, res) {
-        (new translateController(res, db)).update();
-    });
-    object.app.post('/translate/remove', function (req, res) {
-        (new translateController(res, db)).remove();
+    object.app.post('/translate/remove', urlencodedParser, function (req, res) {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        (new translateController(res)).remove(req.body);
     });
 
     // object.app.get('/login', function (req, res, next) {

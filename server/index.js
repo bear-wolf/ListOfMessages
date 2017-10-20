@@ -24,9 +24,9 @@ http.createServer(app).listen(app.get('port'), function () {
     route.express = express;
     route.init();
 })
-// process.on('exit', function (code) {
-//     console.log('About to exit with code:'+code);
-// });
-// process.on('finish', function() {
-//     console.log('request end');
-// });
+process.on('exit', function (code) {
+    console.log('About to exit with code:'+code);
+});
+process.on('finish', function() {
+    console.log('request end');
+});

@@ -1,12 +1,13 @@
 var MongoClient = require('mongodb').MongoClient,
-    config = require('./../config'),
+    config = require('./../config/index'),
+    exception = require('./../config/exception'),
     _ = require('underscore');
     Server = require('mongodb').Server;
 
 var mongoController = function () {
     this.client = MongoClient;
     this.config = config;
-
+    this.exception = exception;
     this.tables = ['translate', 'attachment', 'user', 'message'];
 };
 
@@ -29,12 +30,17 @@ mongoController.prototype.install = function () {
 
 mongoController.prototype.connect = function (callback) {
     this.client.connect('mongodb://localhost:' + this.config.portDb +'/'+ this.config.db, function(err,database) {
+        var data = {};
+
         if(err) {
-            console.error(err)
+            data.status = false;
+            data.message = exception.serverNotRun;
         } else {
-            if (_.isFunction(callback)) {
-                callback(database);
-            }
+            data.status = true;
+            data.db = database;
+        }
+        if (_.isFunction(callback)) {
+            callback(data);
         }
     })
 }
