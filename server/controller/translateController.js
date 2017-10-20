@@ -38,22 +38,30 @@ translateController.prototype.save = function (data) {
 }
 
 translateController.prototype.get = function () {
-    var data,
+    var data = {
+            count: 0
+        },
         object = this;
 
-    data = {
-        status: true
-    };
-
-    this.collection.find().toArray(function(err, docs) {
-        if (err) {
-            data.status = false;
-        } else {
-            data.body = docs;
-            data.length = docs.length;
+    this.mongoCtrl.connect(function (db) {
+        if (!db) {
+            object.resource.end(404);
+            return;
         }
+        var collection = db.collection('translate');
 
-        object.resource.end(JSON.stringify(data));
+        collection.find().toArray(function(err, docs) {
+            if (err) {
+                data.status = false;
+            } else {
+                data.status = true;
+                data.body = docs;
+                data.count = docs.length
+            }
+
+            object.resource.end(JSON.stringify(data));
+            db.close();
+        });
     });
 }
 
