@@ -5,6 +5,8 @@ import {TranslateFormComponent} from './translate-form/translate-form.component'
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {TranslateRoutingModule} from './translate-routing.module';
+import {MessageComponent} from "../shared/message/message.component";
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
     declarations: [
@@ -13,14 +15,16 @@ import {TranslateRoutingModule} from './translate-routing.module';
     ],
     imports: [
         CommonModule,
+        SharedModule,
         ReactiveFormsModule,
         FormsModule,
-        TranslateRoutingModule
+        TranslateRoutingModule,
     ],
     exports: [
         TranslateComponent,
         TranslateFormComponent,
     ],
+    // providers: [HTTP_PROVIDERS],
     bootstrap: [TranslateComponent]
 })
 export class TranslateModule { }

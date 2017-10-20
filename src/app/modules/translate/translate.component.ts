@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, EventEmitter, Output} from '@angular/core';
+import {TranslateService} from "../shared/translate/translate.service";
 
 @Component({
   selector: 'app-translate',
@@ -6,10 +7,22 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./translate.component.css']
 })
 export class TranslateComponent implements OnInit {
+  message: null;
 
-  constructor() { }
+  constructor(
+      private translateService: TranslateService
+  ) { }
 
   ngOnInit() {
+    console.log('TranslateComponent');
+    this.translateService.getMessage().subscribe((data)=>{
+      if (data.status) {
+        this.message = data.message;
+      }
+    })
   }
 
+  close() {
+    this.message = null;
+  }
 }

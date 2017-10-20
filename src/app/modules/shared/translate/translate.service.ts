@@ -2,12 +2,14 @@ import {Injectable} from '@angular/core';
 import {BaseService} from "../base.service";
 import {Http, Headers, RequestMethod, RequestOptions, URLSearchParams} from "@angular/http";
 import {environment} from "../../../../environments/environment";
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {Translate} from "../../../models/translate"; // import our opaque token
+import 'rxjs/Rx';
 
 @Injectable()
 export class TranslateService  {
   host: string;
+  private message = new Subject<any>();
 
   private _currentLang: string;
   private _translations = {
@@ -16,7 +18,13 @@ export class TranslateService  {
     'en': null
   };
 
-  // private data: Observable;
+  getMessage(): Observable<any> {
+    return this.message.asObservable();
+  }
+
+  sendMessage(data) {
+    this.message.next(data);
+  }
 
   public get currentLang() {
     return this._currentLang;
@@ -29,7 +37,11 @@ export class TranslateService  {
 
     this.host = environment.host;
 
-        this.baseService.getTranslateAll().subscribe((data) => {
+    // this.storeAsObservable = new Observable(observer=>{
+    //
+    // })
+
+    this.baseService.getTranslateAll().subscribe((data) => {
           if (data.length) {
               this._translations.ua = data.json();
           }
