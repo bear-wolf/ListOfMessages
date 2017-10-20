@@ -50,6 +50,10 @@ route.prototype.init = function () {
         (new translateController(res)).get();
     });
 
+    object.app.get('/translate/get/:id', function (req, res) {
+        (new translateController(res)).getById(req.params.id);
+    });
+
     var urlencodedParser = bodyParser.urlencoded({ extended: true })
     var jsonParser = bodyParser.json();
     object.app.post('/translate/save', urlencodedParser, function (req, res) {

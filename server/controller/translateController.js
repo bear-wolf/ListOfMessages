@@ -89,6 +89,39 @@ translateController.prototype.get = function () {
     });
 }
 
+translateController.prototype.getById = function (id) {
+    var _this = this;
+
+    this.mongoCtrl.connect(function (data) {
+        var _data;
+
+        _data = {
+            count: 0
+        };
+
+        if (!data.status) {
+            _this.resource.end(JSON.stringify(data));
+            return;
+        }
+        var collection = data.db.collection(_this.entity);
+
+        collection.find({
+            '_id' : new _this.mongoCtrl.mongodb.ObjectID(id)
+        }).toArray(function(err, docs) {
+            if (err) {
+                _data.status = false;
+            } else {
+                _data.status = true;
+                _data.body = docs;
+                _data.count = docs.length
+            }
+
+            data.db.close();
+            _this.resource.end(JSON.stringify(_data));
+        });
+    });
+}
+
 
 translateController.prototype.remove = function (json) {
     var _this = this;
