@@ -9,6 +9,7 @@ import {TranslateFormComponent} from './translate-form/translate-form.component'
 export const TranslateRoutes: Routes = [
     { path: 'translate', component: TranslateComponent, children: [
         { path: 'add', component: TranslateFormComponent},
+        { path: 'edit/:id', component: TranslateFormComponent},
     ]},
 ]
 

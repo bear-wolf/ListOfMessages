@@ -104,6 +104,24 @@ export class TranslateService  {
         });
   }
 
+  public remove(id:string) {
+    let headers = new Headers();
+
+    headers.append('Accept', '*/*');
+
+    let params = new URLSearchParams();
+    params.set('id', id);
+
+    let options = new RequestOptions({ headers: headers});
+    return this.http.post(this.host + '/translate/remove', params, options)
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: any) => {
+          return Observable.throw(error);
+        });
+  }
+
   public getCurrentLang() {
     if (this._currentLang === 'ua') {
       return 'uk';
