@@ -1,14 +1,17 @@
 var MongoClient = require('mongodb').MongoClient,
     config = require('./../config/index'),
     exception = require('./../config/exception'),
-    _ = require('underscore');
+    _ = require('underscore'),
+    mongodb = require('mongodb'),
     Server = require('mongodb').Server;
+
 
 var mongoController = function () {
     this.client = MongoClient;
     this.config = config;
     this.exception = exception;
     this.tables = ['translate', 'attachment', 'user', 'message'];
+    this.mongodb = mongodb;
 };
 
 mongoController.prototype.setParams = function (data) {

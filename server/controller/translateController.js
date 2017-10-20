@@ -1,5 +1,6 @@
 var mongoController = require('./mongoController.js'),
     fileOfData = 'data.json',
+    enumMessage = require('./../config/message'),
     data = require('./../'+ fileOfData),
     fs = require('fs');
 
@@ -29,6 +30,7 @@ translateController.prototype.save = function (json) {
         var callback = function (err, result) {
             if (err) {
                 _data.status = false;
+                delete _data.message;
             } else{
                 _data.status = true;
             }
@@ -40,6 +42,7 @@ translateController.prototype.save = function (json) {
 
         if (json.id) {
             // update
+            _data.message = enumMessage.updateSuccessful;
             collection.updateOne( {
                     '_id': json.id
                 },
@@ -49,6 +52,7 @@ translateController.prototype.save = function (json) {
                 true, callback
             );
         } else {
+            _data.message = enumMessage.insertSuccessful;
             collection.insertOne(json, callback); //insert
         }
     });
@@ -68,7 +72,7 @@ translateController.prototype.get = function () {
             _this.resource.end(JSON.stringify(data));
             return;
         }
-        var collection = data.db.collection(this.entity);
+        var collection = data.db.collection(_this.entity);
 
         collection.find().toArray(function(err, docs) {
             if (err) {
@@ -96,20 +100,23 @@ translateController.prototype.remove = function (json) {
         if (!data.status) {
             _this.resource.end(404);
         } else {
-            data.db.collection(_this.entity).remove( {
-                "_id": json.id
+            collection = data.db.collection(_this.entity);
+
+            collection.deleteOne({
+                _id: new _this.mongoCtrl.mongodb.ObjectID(json.id)
             },
             function (err, result) {
-            if (err) {
-                _data.status = false;
-            } else{
-                _data.status = true;
-            }
+                if (err) {
+                    _data.status = false;
+                } else{
+                    _data.status = true;
+                    _data.message = enumMessage.removeSuccessful;
+                }
 
-            data.db.close();
+                data.db.close();
 
-            _this.resource.end(JSON.stringify(_data));
-        });
+                _this.resource.end(JSON.stringify(_data));
+            });
         }
     });
 }
