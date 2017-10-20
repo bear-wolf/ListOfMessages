@@ -22,7 +22,6 @@ export class TranslateComponent implements OnInit {
         this.message = data.message;
       }
     })
-
     this.get();
   }
 

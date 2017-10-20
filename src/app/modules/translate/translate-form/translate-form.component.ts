@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 import {TranslateService} from '../../shared/translate/translate.service';
 import {Translate} from "../../../models/translate";
-import {Router} from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
 import {Observable} from "rxjs";
 
 @Component({
@@ -17,16 +17,38 @@ export class TranslateFormComponent implements OnInit {
 
   constructor(
       private translateService: TranslateService,
-      private route: Router,
+      private router: Router,
+      private route: ActivatedRoute,
       private fb: FormBuilder
   ) {
+      this.createFrom(null)
+  }
+
+
+  createFrom(data) {
       this.translateForm = this.fb.group({
-          'key': new FormControl('',  Validators.required),
-          'value': new FormControl('',  Validators.required),
+          'key': new FormControl(data ? data.key : '',  Validators.required),
+          'value': new FormControl(data ? data.value : '',  Validators.required),
+          '_id': new FormControl(data ? data._id : ''),
       })
   }
 
     ngOnInit() {
+        this.edit();
+    }
+
+    edit() {
+        let id = this.route.snapshot.params.id;
+
+        if (id) {
+            this.translateService.getById(id)
+                .subscribe(data=>{
+                   if (data.count) {
+                       this.createFrom(data.body[0]);
+                   }
+                });
+        }
+
     }
 
     onSubmit(value, valid) {
@@ -38,7 +60,7 @@ export class TranslateFormComponent implements OnInit {
                     if (data.status) {
                         data.message = 'The record was successfull created';
                         this.translateService.sendMessage(data);
-                        this.route.navigate(['/translate']);
+                        this.router.navigate(['/translate']);
                     }
                 })
         }

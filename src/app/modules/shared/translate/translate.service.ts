@@ -104,6 +104,21 @@ export class TranslateService  {
         });
   }
 
+    public getById(id) {
+        let headers = new Headers();
+
+        headers.append('Accept', '*/*');
+
+        let options = new RequestOptions({ headers: headers});
+        return this.http.get(this.host + '/translate/get/' + id, options)
+            .map(res => {
+                return res.json();
+            })
+            .catch((error: any) => {
+                return Observable.throw(error);
+            });
+    }
+
   public remove(id:string) {
     let headers = new Headers();
 
