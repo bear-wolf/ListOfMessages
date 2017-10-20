@@ -8,6 +8,7 @@ import {TranslateService} from "../shared/translate/translate.service";
 })
 export class TranslateComponent implements OnInit {
   message: null;
+  listOfTranslate: null;
 
   constructor(
       private translateService: TranslateService
@@ -20,9 +21,13 @@ export class TranslateComponent implements OnInit {
         this.message = data.message;
       }
     })
-  }
 
-  close() {
-    this.message = null;
+    this.translateService.get()
+        .subscribe(data=>{
+          if (data.status && data.count) {
+            this.listOfTranslate = data.body;
+          }
+      });
+
   }
 }

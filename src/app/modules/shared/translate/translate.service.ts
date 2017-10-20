@@ -89,6 +89,21 @@ export class TranslateService  {
         });
   }
 
+  public get() {
+    let headers = new Headers();
+
+    headers.append('Accept', '*/*');
+
+    let options = new RequestOptions({ headers: headers});
+    return this.http.get(this.host + '/translate', options)
+        .map(res => {
+          return res.json();
+        })
+        .catch((error: any) => {
+          return Observable.throw(error);
+        });
+  }
+
   public getCurrentLang() {
     if (this._currentLang === 'ua') {
       return 'uk';

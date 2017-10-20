@@ -13,5 +13,28 @@
     <app-message></app-message>
     <router-outlet></router-outlet>
 
+    <div class="panel-body"
+        *ngIf="listOfTranslate && listOfTranslate.length">
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>key</th>
+              <th>value</th>
+              <th>Operation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let translate of listOfTranslate; let index = index">
+              <td [innerText]="index"></td>
+              <td [innerText]="translate.key"></td>
+              <td [innerText]="translate.value"></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+
+
   </div>
 </section>
