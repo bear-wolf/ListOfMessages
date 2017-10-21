@@ -3,7 +3,7 @@
  */
 
 export class Translate {
-    id: number;
+    id: string;
     key: string;
     value: string;
 

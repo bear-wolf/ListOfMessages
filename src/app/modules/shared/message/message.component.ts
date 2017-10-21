@@ -17,11 +17,9 @@ export class MessageComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.subscription = this.translateService.getMessage().subscribe((data)=>{
-      if (data.status) {
-        this.subscription.unsubscribe();
-        this.message = data.message;
-      }
+    this.subscription = this.translateService.getMessage().subscribe((message)=>{
+      this.subscription.unsubscribe();
+      this.message = message;
     })
   }
 

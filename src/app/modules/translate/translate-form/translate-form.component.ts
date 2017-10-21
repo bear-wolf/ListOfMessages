@@ -29,7 +29,7 @@ export class TranslateFormComponent implements OnInit {
       this.translateForm = this.fb.group({
           'key': new FormControl(data ? data.key : '',  Validators.required),
           'value': new FormControl(data ? data.value : '',  Validators.required),
-          '_id': new FormControl(data ? data._id : ''),
+          'id': new FormControl(data ? data._id : ''),
       })
   }
 
@@ -53,14 +53,17 @@ export class TranslateFormComponent implements OnInit {
 
     onSubmit(value, valid) {
         if (valid) {
-            debugger;
+            let translate = new Translate(value.key, value.value);
+
+            translate.id = value.id;
+
             this.translateService
-                .save(new Translate(value.key, value.value))
+                .save(translate)
                 .subscribe((data)=>{
                     if (data.status) {
-                        data.message = 'The record was successfull created';
-                        this.translateService.sendMessage(data);
+                        this.translateService.sendMessage(data.message);
                         this.router.navigate(['/translate']);
+                        this.translateService.updatePage();
                     }
                 })
         }

@@ -10,6 +10,7 @@ import 'rxjs/Rx';
 export class TranslateService  {
   host: string;
   private message = new Subject<any>();
+  private _dataIsChanged = new Subject<any>();
 
   private _currentLang: string;
   private _translations = {
@@ -17,6 +18,24 @@ export class TranslateService  {
     'ru': null,
     'en': null
   };
+
+    // inject our translations
+    constructor(
+        public http: Http,
+        public baseService: BaseService) {
+
+        this.host = environment.host;
+
+        // this.storeAsObservable = new Observable(observer=>{
+        //
+        // })
+
+        this.baseService.getTranslateAll().subscribe((data) => {
+            if (data.length) {
+                this._translations.ua = data.json();
+            }
+        });
+    }
 
   getMessage(): Observable<any> {
     return this.message.asObservable();
@@ -26,26 +45,18 @@ export class TranslateService  {
     this.message.next(data);
   }
 
-  public get currentLang() {
-    return this._currentLang;
+  public dataIsChanged(): Observable<any>{
+      return this._dataIsChanged.asObservable();
   }
 
-  // inject our translations
-  constructor(
-      public http: Http,
-      public baseService: BaseService) {
-
-    this.host = environment.host;
-
-    // this.storeAsObservable = new Observable(observer=>{
-    //
-    // })
-
-    this.baseService.getTranslateAll().subscribe((data) => {
-          if (data.length) {
-              this._translations.ua = data.json();
-          }
+    updatePage(){
+        return this._dataIsChanged.next({
+            status: true
         });
+    }
+
+  public get currentLang() {
+    return this._currentLang;
   }
 
   public use(lang: string): void {

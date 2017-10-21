@@ -31,9 +31,10 @@
               <td [innerText]="translate.value"></td>
               <td>
                 <a href="javascript:;"
-                   (click)="remove(translate._id)"
+                   (click)="remove(translate.id)"
                    [innerText]="'remove'"></a>
-                <a [routerLink]="['/translate/edit', translate._id]"
+                <a href="javascript:;"
+                   (click)="update(translate.id)"
                    [innerText]="'update'"></a>
               </td>
             </tr>

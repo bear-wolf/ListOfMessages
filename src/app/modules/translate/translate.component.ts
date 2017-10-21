@@ -1,6 +1,6 @@
 import {Component, OnInit, EventEmitter, Output} from '@angular/core';
 import {TranslateService} from "../shared/translate/translate.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-translate',
@@ -12,7 +12,9 @@ export class TranslateComponent implements OnInit {
   listOfTranslate: null;
 
   constructor(
-      private translateService: TranslateService
+      private translateService: TranslateService,
+      private router: Router,
+      private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
@@ -23,6 +25,12 @@ export class TranslateComponent implements OnInit {
       }
     })
     this.get();
+
+    this.translateService.dataIsChanged().subscribe((data)=>{
+        if (data.status) {
+            this.get();
+        }
+    })
   }
 
   get() {
@@ -30,6 +38,8 @@ export class TranslateComponent implements OnInit {
       .subscribe(data=>{
         if (data.status && data.count) {
           this.listOfTranslate = data.body;
+        } else{
+          this.translateService.sendMessage(data.message);
         }
       });
   }
@@ -39,7 +49,13 @@ export class TranslateComponent implements OnInit {
       if (data.status) {
         this.message = data.message;
         this.get();
+      } else {
+          this.translateService.sendMessage(data.message);
       }
     })
+  }
+  update(id){
+    this.router.navigate(['/translate/edit', id])
+    //this.listOfTranslate = null;
   }
 }
