@@ -9,7 +9,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class TranslateComponent implements OnInit {
   message: null;
-  listOfTranslate: null;
+  listOfTranslate: any;
+
+  startPage = 1;
+  perPage = 2;
 
   constructor(
       private translateService: TranslateService,

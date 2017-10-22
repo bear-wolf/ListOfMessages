@@ -41,6 +41,7 @@
           </tbody>
         </table>
     </div>
+    <pagination-controls-custom *ngIf="listOfTranslate && listOfTranslate.length > perPage" (pageChange)="startPage = $event"></pagination-controls-custom>
 
     <ng-template #preloader>
       <app-preloader></app-preloader>

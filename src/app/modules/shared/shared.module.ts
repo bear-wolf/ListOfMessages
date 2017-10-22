@@ -4,20 +4,27 @@ import {TranslatePipe} from './translate/translate.pipe';
 import {CommonModule} from '@angular/common';
 import { MessageComponent } from './message/message.component';
 import { PreloaderComponent } from './preloader/preloader.component';
+import {PaginationControlsCustomComponent} from './pagination-controls-custom/pagination-controls-custom.component';
+import { BsDropdownModule, ModalModule, TabsModule, TypeaheadModule } from 'ngx-bootstrap';
 
 @NgModule({
     declarations: [
         SharedComponent,
         TranslatePipe,
         MessageComponent,
-        PreloaderComponent
+        PreloaderComponent,
+        PaginationControlsCustomComponent
     ],
     imports: [
-        CommonModule
+        CommonModule,
+        ModalModule,
+        BsDropdownModule,
+        TabsModule
     ],
     exports: [
         MessageComponent,
         PreloaderComponent,
+        PaginationControlsCustomComponent,
 
         TranslatePipe,
         SharedComponent
