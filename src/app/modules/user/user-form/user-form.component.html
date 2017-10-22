@@ -1,6 +1,6 @@
 <div class="container-fluid">
 
-    <form [formGroup]="participantForm" #form="ngForm" (ngSubmit)="onSubmit(participantForm)">
+    <form [formGroup]="userForm" #form="ngForm" (ngSubmit)="onSubmit(userForm.value, userForm.valid)">
       <div class="row">
         <div class="form-group">
           <label for="firstName"
@@ -10,7 +10,7 @@
                   placeholder="Your first name"
                   class="form-control"
                   #firstName
-                  formGroupName="firstName"
+                  formControlName="firstName"
                   id="firstName"/>
           <div class="">
             {{ firstName?.errors }}
@@ -28,7 +28,7 @@
                   #lastName
                   type="text"
                   placeholder="Your last name"
-                  formGroupName="lastName"
+                  formControlName="lastName"
                   id="lastName">
           <div class="message-error" *ngIf="!lastName.value && form.submitted">Заповніть поле</div>
         </div>
@@ -38,7 +38,7 @@
         <div class="form-group">
           <label for="middleName"
                  [innerText]="'middleName'"></label>
-          <input class="form-control" #middleName formGroupName="middleName" id="middleName">
+          <input class="form-control" #middleName formControlName="middleName" id="middleName">
           <div class="message-error" *ngIf="!middleName.value && form.submitted">Заповніть поле</div>
         </div>
       </div>

@@ -16,7 +16,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { MessageFormComponent } from './pages/message/message-form/message-form.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {UserService} from './modules/user/user-service.service';
+import {UserService} from './modules/user/user.service';
 import {UserModule} from './modules/user/user.module';
 import {TranslateModule} from './modules/translate/translate.module';
 import {TranslateService} from './modules/shared/translate/translate.service';

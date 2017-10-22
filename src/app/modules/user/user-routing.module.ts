@@ -8,6 +8,7 @@ import {UserComponent} from './user.component';
 export const UserRoutes: Routes = [
     { path: 'users', component: UserComponent, children: [
         { path: 'add', component: UserFormComponent},
+        { path: 'edit/:id', component: UserFormComponent},
     ]},
 ]
 

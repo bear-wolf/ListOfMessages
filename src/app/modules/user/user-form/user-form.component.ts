@@ -1,41 +1,71 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../user-service.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {UserService} from '../user.service';
 import {User} from '../user-model';
-
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css']
 })
+
 export class UserFormComponent implements OnInit {
-  participantForm: FormGroup;
+  userForm: FormGroup;
 
   constructor(
       private userService: UserService,
+      private router: Router,
+      private route: ActivatedRoute,
       private fb: FormBuilder
   ) {
-
-    this.participantForm = this.fb.group({
-      'firstName': new FormControl('',  Validators.required),
-      'lastName': new FormControl('',  Validators.required),
-      'middleName': new FormControl('',  Validators.required)
-    })
+        console.log('UserFormComponent');
+      this.createFrom(null);
   }
 
-  ngOnInit() {
-  }
+    createFrom(data) {
+        this.userForm = this.fb.group({
+            'firstName': new FormControl(data ? data.firstName : '',  Validators.required),
+            'lastName': new FormControl(data ? data.lastName : '',  Validators.required),
+            'middleName': new FormControl(data ? data.middleName : '',  Validators.required),
+            'id': new FormControl(data ? data._id : '')
+        })
+    }
 
-  onSubmit(form) {
-    console.log(form);
-    if (form.valid) {
-      let user,
-          value = form.value;
+    ngOnInit() {
+        this.edit();
+    }
 
-      user = new User(value.firstName, value.lastName, value.middleName);
+    edit() {
+        let id = this.route.snapshot.params.id;
 
-      this.userService.save(user)
+        if (id) {
+            this.userService.getById(id)
+                .subscribe(data=>{
+                    if (data.count) {
+                        this.createFrom(data.body[0]);
+                    }
+                });
+        }
+
+    }
+
+  onSubmit(value, valid) {
+    if (valid) {
+      let user = new User(value.firstName, value.lastName, value.middleName);
+
+        user.id = value.id;
+
+        this.userService
+            .save(user)
+            .subscribe((data)=>{
+                if (data.status) {
+                    this.userService.sendMessage(data.message);
+                    this.router.navigate(['/users']);
+                    this.userService.updatePage();
+                }
+            })
     }
   }
 }

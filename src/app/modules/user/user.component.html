@@ -10,6 +10,43 @@
                 [innerText]="'Add'"></button>
       </div>
     </div>
+
+    <app-message></app-message>
     <router-outlet></router-outlet>
+
+    <div class="panel-body"
+         *ngIf="listOfUsers && listOfUsers.length;else preloader">
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>firstName</th>
+          <th>lastName</th>
+          <th>middleName</th>
+          <th class="operation">Operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of listOfUsers; let index = index">
+          <td [innerText]="index+1"></td>
+          <td [innerText]="user.firstName"></td>
+          <td [innerText]="user.lastName"></td>
+          <td [innerText]="user.middleName"></td>
+          <td>
+            <a href="javascript:;"
+               (click)="remove(user._id)"
+               [innerText]="'remove'"></a>
+            <a href="javascript:;"
+               (click)="update(user._id)"
+               [innerText]="'update'"></a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #preloader *ngIf="isLoad">
+      <app-preloader></app-preloader>
+    </ng-template>
   </div>
 </section>
