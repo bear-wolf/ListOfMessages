@@ -22,6 +22,7 @@ export class TranslateFormComponent implements OnInit {
       private fb: FormBuilder
   ) {
       this.createFrom(null)
+      console.log('TranslateFormComponent');
   }
 
 
