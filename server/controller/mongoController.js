@@ -1,6 +1,7 @@
 var MongoClient = require('mongodb').MongoClient,
     config = require('./../config/index'),
     exception = require('./../config/exception'),
+    enumMessage = require('./../config/message'),
     _ = require('underscore'),
     mongodb = require('mongodb'),
     Server = require('mongodb').Server;
@@ -29,23 +30,6 @@ mongoController.prototype.install = function () {
 
     this.response.writeHead(200);
     this.response.end(JSON.stringify(data));
-}
-
-mongoController.prototype.connect = function (callback) {
-    this.client.connect('mongodb://localhost:' + this.config.portDb +'/'+ this.config.db, function(err,database) {
-        var data = {};
-
-        if(err) {
-            data.status = false;
-            data.message = exception.serverNotRun;
-        } else {
-            data.status = true;
-            data.db = database;
-        }
-        if (_.isFunction(callback)) {
-            callback(data);
-        }
-    })
 }
 
 mongoController.prototype.createDataBase = function () {
@@ -77,5 +61,145 @@ mongoController.prototype.createTables = function () {
     });
 }
 
+mongoController.prototype.connectToDB = function (entity, callback) {
+    this.client.connect('mongodb://localhost:' + this.config.portDb +'/'+ this.config.db, function(err,database) {
+        var data = {};
+
+        if(err) {
+            data.status = false;
+            data.message = exception.serverNotRun;
+        } else {
+            data.status = true;
+            data.db = database;
+            data.collection = data.db.collection(entity);
+        }
+
+        if (_.isFunction(callback)) {
+            callback(data);
+            return;
+        }
+        throw new Error('This is does not callback');
+    })
+}
+
+mongoController.prototype.get = function (entity, callback) {
+    this.connectToDB(entity, function (data) {
+        var _data = {};
+
+        if (!data.status) {
+            _data.status = false;
+            callback(data);
+            return;
+        }
+        data.collection.find().toArray(function(err, docs) {
+            data.error = err;
+            data.body = docs;
+            data.count = docs.length;
+
+            if (_.isFunction(callback)) {
+                callback(data)
+            }
+        });
+    })
+}
+
+mongoController.prototype.save = function (entity, json, callback) {
+    var _this = this;
+
+    this.connectToDB(entity, function (data) {
+        var _data = {};
+
+        if (!data.status) {
+            _data.status = false;
+            callback(data);
+            return;
+        }
+
+        var _callback = function (err, result) {
+            data.db.close();
+            data.error = err;
+            data.result = result;
+
+            if (_.isFunction(callback)) {
+                callback(data)
+            }
+        }
+
+        if (json.id) {
+            // update
+            data.message = enumMessage.updateSuccessful;
+            data.collection.updateOne( {
+                    '_id': new _this.mongodb.ObjectID(json.id)
+                },
+                {
+                    $set: json
+                },
+                true, _callback
+            );
+        } else {
+            data.message = enumMessage.insertSuccessful;
+            data.collection.insertOne(json, _callback); //insert
+        }
+
+    })
+}
+
+mongoController.prototype.remove = function (entity, json, callback) {
+    var _this = this;
+
+    this.connectToDB(entity, function (data) {
+        var _data = {};
+
+        if (!data.status) {
+            _data.status = false;
+            callback(data);
+        }
+        else {
+            data.collection.deleteOne({
+                    _id: new _this.mongodb.ObjectID(json.id)
+                },
+                function (err, result) {
+                    if (err) {
+                        _data.status = false;
+                    } else{
+                        _data.status = true;
+                        _data.message = enumMessage.removeSuccessful;
+                    }
+
+                    if (_.isFunction(callback)) {
+                        callback(_data);
+                    }
+                });
+        }
+
+
+    })
+}
+
+mongoController.prototype.getById = function (entity, id, callback) {
+    var _this = this;
+
+    this.connectToDB(entity, function (data) {
+        var _data = {};
+
+        if (!data.status) {
+            _data.status = false;
+            callback(data);
+            return;
+        }
+        data.collection.find({
+            '_id': new _this.mongodb.ObjectID(id)
+        }).toArray(function(err, docs) {
+            data.error = err;
+            data.body = docs;
+            data.count = docs.length;
+
+            if (_.isFunction(callback)) {
+                callback(data)
+            }
+        });
+    })
+
+}
 
 module.exports = mongoController;

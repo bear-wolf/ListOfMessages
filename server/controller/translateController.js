@@ -24,12 +24,14 @@ translateController.prototype.index = function () {
 translateController.prototype.save = function (json) {
     var _this = this;
 
-    this.saveToDB(_this.entity, json, function (data) {
-        var _data = {};
+    this.db.save(_this.entity, json, function (data) {
+        var _data = {
+            message : data.message
+        };
 
         if (data.error) {
             _data.status = false;
-            _data.message = data.message;
+
         } else {
             _data.status = true;
         }
@@ -40,7 +42,7 @@ translateController.prototype.save = function (json) {
 translateController.prototype.get = function () {
     var _this = this;
 
-    this.getFromDB(_this.entity, function (data) {
+    this.db.get(_this.entity, function (data) {
         var _data = {};
 
         if (data.error) {
@@ -58,28 +60,18 @@ translateController.prototype.get = function () {
 translateController.prototype.getById = function (id) {
     var _this = this;
 
-    this.connectToDB(_this.entity, function (data) {
+    this.db.getById(_this.entity, id, function (data) {
         var _data = {};
 
         if (!data.status) {
             _data.status = false;
-            _this.resource.end(JSON.stringify(_data));
+        } else {
+            _data.status = true;
+            _data.body = data.body;
+            _data.count = data.count;
         }
 
-        data.collection.find({
-            '_id' : new _this.mongoCtrl.mongodb.ObjectID(id)
-        }).toArray(function(err, docs) {
-            if (err) {
-                _data.status = false;
-            } else {
-                _data.status = true;
-                _data.body = docs;
-                _data.count = docs.length
-            }
-
-            data.db.close();
-            _this.resource.end(JSON.stringify(_data));
-        });
+        _this.resource.end(JSON.stringify(_data));
     })
 }
 
@@ -87,30 +79,11 @@ translateController.prototype.getById = function (id) {
 translateController.prototype.remove = function (json) {
     var _this = this;
 
-    this.mongoCtrl.connect(function (data) {
-        var collection,
-            _data = {};
-
+    this.db.remove(this.entity, json, function (data) {
         if (!data.status) {
-            _this.resource.end(404);
+            _this.resource.end(data);
         } else {
-            collection = data.db.collection(_this.entity);
-
-            collection.deleteOne({
-                _id: new _this.mongoCtrl.mongodb.ObjectID(json.id)
-            },
-            function (err, result) {
-                if (err) {
-                    _data.status = false;
-                } else{
-                    _data.status = true;
-                    _data.message = enumMessage.removeSuccessful;
-                }
-
-                data.db.close();
-
-                _this.resource.end(JSON.stringify(_data));
-            });
+            _this.resource.end(JSON.stringify(data));
         }
     });
 }
