@@ -3,6 +3,7 @@
  */
 var mainController = require('./controller/mainController'),
     translateController = require('./controller/translateController'),
+    userController = require('./controller/userController'),
     mongoController = require('./controller/mongoController.js'),
     config = require('./config'),
     bodyParser = require('body-parser');
@@ -22,6 +23,9 @@ route.prototype.init = function () {
         object = this;
 
     mongoCtrl = new mongoController(config);
+
+    var urlencodedParser = bodyParser.urlencoded({ extended: true })
+    var jsonParser = bodyParser.json();
 
     object.app.use(function (req, res, next) {
         object.addHeader(res);
@@ -46,6 +50,7 @@ route.prototype.init = function () {
     });
 
 
+    /*translate*/
     object.app.get('/translate', function (req, res) {
         (new translateController(res)).get();
     });
@@ -54,8 +59,6 @@ route.prototype.init = function () {
         (new translateController(res)).getById(req.params.id);
     });
 
-    var urlencodedParser = bodyParser.urlencoded({ extended: true })
-    var jsonParser = bodyParser.json();
     object.app.post('/translate/save', urlencodedParser, function (req, res) {
         if (!req.body) {
             return res.sendStatus(400);
@@ -68,6 +71,29 @@ route.prototype.init = function () {
         }
         (new translateController(res)).remove(req.body);
     });
+    //=====================
+
+    /*users*/
+    object.app.get('/users', function (req, res) {
+        (new userController(res)).get();
+    });
+    object.app.get('/users/get/:id', function (req, res) {
+        (new userController(res)).getById(req.params.id);
+    });
+
+    object.app.post('/users/save', urlencodedParser, function (req, res) {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        (new userController(res)).save(req.body);
+    });
+    object.app.post('/users/remove', urlencodedParser, function (req, res) {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        (new userController(res)).remove(req.body);
+    });
+    //====================
 
     // object.app.get('/login', function (req, res, next) {
     //     if (req.query.email && req.query.password) {
