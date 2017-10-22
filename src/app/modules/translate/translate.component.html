@@ -14,7 +14,7 @@
     <router-outlet></router-outlet>
 
     <div class="panel-body"
-        *ngIf="listOfTranslate && listOfTranslate.length">
+        *ngIf="listOfTranslate && listOfTranslate.length;else preloader">
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
@@ -42,6 +42,9 @@
         </table>
     </div>
 
+    <ng-template #preloader>
+      <app-preloader></app-preloader>
+    </ng-template>
 
   </div>
 </section>
