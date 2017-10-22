@@ -1,6 +1,4 @@
-var mongoController = require('./mongoController.js'),
-    enumMessage = require('./../config/message'),
-    _ = require('underscore');
+var mongoController = require('./mongoController.js');
 
 var baseController = function () {
     this.db = (new mongoController);

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BaseService} from "../base.service";
-import {Http, Headers, RequestMethod, RequestOptions, URLSearchParams} from "@angular/http";
+import {Http, Headers, RequestOptions, URLSearchParams} from "@angular/http";
 import {environment} from "../../../../environments/environment";
 import {Observable, Subject} from "rxjs";
 import {Translate} from "../../../models/translate"; // import our opaque token
@@ -45,7 +45,7 @@ export class TranslateService  {
     this.message.next(data);
   }
 
-  public dataIsChanged(): Observable<any>{
+  dataIsChanged(): Observable<any>{
       return this._dataIsChanged.asObservable();
   }
 
@@ -89,7 +89,7 @@ export class TranslateService  {
   for(let key in translate){
       params.set(key, translate[key])
   }
-
+debugger;
   let options = new RequestOptions({ headers: headers});
   return this.http.post(this.host + '/translate/save', params, options)
         .map(res => {

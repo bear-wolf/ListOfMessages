@@ -1,10 +1,9 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from "@angular/router";
 
 import {TranslateService} from '../../shared/translate/translate.service';
 import {Translate} from "../../../models/translate";
-import {Router, ActivatedRoute} from "@angular/router";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-translate-form',
@@ -13,7 +12,6 @@ import {Observable} from "rxjs";
 })
 export class TranslateFormComponent implements OnInit {
   translateForm: FormGroup;
-
 
   constructor(
       private translateService: TranslateService,
