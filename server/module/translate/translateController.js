@@ -1,16 +1,9 @@
 var util = require('util'),
-    baseCtrl = require('./baseController');
-
-var mongoController = require('./mongoController.js'),
-    fileOfData = 'data.json',
-    enumMessage = require('./../config/message'),
-    data = require('./../'+ fileOfData),
-    fs = require('fs');
+    baseCtrl = require('../../controller/baseController');
 
 var translateController = function (resource) {
     translateController.super_.apply(this, arguments);
     this.resource = resource;
-    this.fs = fs;
     this.entity = 'translate';
 }
 

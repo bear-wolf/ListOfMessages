@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient,
-    config = require('./../config/index'),
+    nconf = require('nconf'),
     exception = require('./../config/exception'),
     enumMessage = require('./../config/message'),
     _ = require('underscore'),
@@ -9,7 +9,6 @@ var MongoClient = require('mongodb').MongoClient,
 
 var mongoController = function () {
     this.client = MongoClient;
-    this.config = config;
     this.exception = exception;
     this.tables = ['translate', 'attachment', 'user', 'message'];
     this.mongodb = mongodb;
@@ -62,7 +61,7 @@ mongoController.prototype.createTables = function () {
 }
 
 mongoController.prototype.connectToDB = function (entity, callback) {
-    this.client.connect('mongodb://localhost:' + this.config.portDb +'/'+ this.config.db, function(err,database) {
+    this.client.connect('mongodb://localhost:' + nconf.get('portDb') +'/'+ nconf.get('db'), function(err,database) {
         var data = {};
 
         if(err) {

@@ -1,5 +1,5 @@
 var util = require('util'),
-    baseCtrl = require('./baseController');
+    baseCtrl = require('../../controller/baseController');
 
 var userController = function (resource) {
     userController.super_.apply(this, arguments);

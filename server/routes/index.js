@@ -1,12 +1,11 @@
 /**
  * Created by andrew on 2/1/17.
  */
-var mainController = require('./controller/mainController'),
-    translateController = require('./controller/translateController'),
-    userController = require('./controller/userController'),
-    mongoController = require('./controller/mongoController.js'),
-    config = require('./config'),
-    bodyParser = require('body-parser');
+
+module.exports = function (app) {
+    require("./../module/translate/translate-routes")(app);
+    require("./../module/user/user-routes")(app);
+};
 
 var route = function () {}
 route.prototype.addHeader = function(res) {
@@ -15,17 +14,11 @@ route.prototype.addHeader = function(res) {
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type'); // Request headers you wish to allow
     res.setHeader('Access-Control-Allow-Credentials', true);
 }
-route.prototype.isAuth = function () {
-
-},
 route.prototype.init = function () {
     var mongoCtrl,
         object = this;
 
     mongoCtrl = new mongoController(config);
-
-    var urlencodedParser = bodyParser.urlencoded({ extended: true })
-    var jsonParser = bodyParser.json();
 
     object.app.use(function (req, res, next) {
         object.addHeader(res);
@@ -48,30 +41,6 @@ route.prototype.init = function () {
             response: res
         }).install();
     });
-
-
-    /*translate*/
-    object.app.get('/translate', function (req, res) {
-        (new translateController(res)).get();
-    });
-
-    object.app.get('/translate/get/:id', function (req, res) {
-        (new translateController(res)).getById(req.params.id);
-    });
-
-    object.app.post('/translate/save', urlencodedParser, function (req, res) {
-        if (!req.body) {
-            return res.sendStatus(400);
-        }
-        (new translateController(res)).save(req.body);
-    });
-    object.app.post('/translate/remove', urlencodedParser, function (req, res) {
-        if (!req.body) {
-            return res.sendStatus(400);
-        }
-        (new translateController(res)).remove(req.body);
-    });
-    //=====================
 
     /*users*/
     object.app.get('/users', function (req, res) {
@@ -182,6 +151,3 @@ route.prototype.init = function () {
         }
     });
 }
-
-
-module.exports = route;
