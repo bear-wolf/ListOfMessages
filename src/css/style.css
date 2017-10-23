@@ -1,3 +1,6 @@
+body {
+  font-size: 14px;
+}
 .brand {
   background: white;
 }
@@ -17,6 +20,10 @@
 .block-output {
   padding: 20px 0;
 }
+.panel-body {
+  padding-top: 15px;
+  padding-botom: 15px;
+}
 .panel-body .btn-section {
   padding-bottom: 20px;
 }
@@ -25,4 +32,7 @@
 }
 .table .operation {
   width: 120px;
+}
+.form-group {
+  width: 100%;
 }

@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import 'css/bootstrap.min.css';
+/*@import 'css/bootstrap.min.css';*/
+@import 'css/bootstrap-v4-A6.min.css';
 @import 'css/bucket.css';
 @import 'css/font-awesome.min.css';
 @import 'css/style.css';

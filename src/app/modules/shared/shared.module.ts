@@ -18,13 +18,16 @@ import { BsDropdownModule, ModalModule, TabsModule, TypeaheadModule } from 'ngx-
     imports: [
         CommonModule,
         ModalModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         TabsModule
     ],
     exports: [
         MessageComponent,
         PreloaderComponent,
         PaginationControlsCustomComponent,
+        BsDropdownModule,
+        ModalModule,
+        TabsModule,
 
         TranslatePipe,
         SharedComponent

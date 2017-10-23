@@ -170,35 +170,12 @@ a:focus {
   height: 17px;
   width: 17px;
   display: inline-block;
-  /*background: url(../images/nav-expand.png) no-repeat top;*/
+  background: url(../images/nav-expand.png) no-repeat top;
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   position: absolute;
   right: 10px;
-}
-.active .dcjq-icon {
-  /*background: url(../images/nav-expand.png) no-repeat bottom;*/
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-}
-.right-side-accordion .dcjq-icon {
-  height: 17px;
-  width: 17px;
-  display: inline-block;
-  /*background: url(../images/acc-expand.png) no-repeat top;*/
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  position: absolute;
-  right: 10px;
-}
-.right-side-accordion .active .dcjq-icon {
-  /*background: url(../images/acc-expand.png) no-repeat bottom;*/
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
 }
 .right-side-accordion li:nth-child(2) ul li .prog-row {
   border: none;
@@ -337,7 +314,7 @@ ul.sidebar-menu li a.active i {
 }
 .wrapper {
   display: inline-block;
-  margin-top: 80px;
+  margin-top: 0px;
   padding: 15px;
   width: 100%;
 }
@@ -572,14 +549,6 @@ ul.top-menu > li > a:focus {
   float: left;
   width: 100%;
 }
-.log-arrow-up {
-  /*background: url("../images/top-arrow.png") no-repeat;*/
-  width: 18px;
-  height: 10px;
-  margin-top: -20px;
-  float: right;
-  margin-right: 15px;
-}
 .dropdown-menu.extended.logout > li > a {
   border-bottom: none !important;
 }
@@ -656,7 +625,6 @@ ul.top-menu > li > a:focus {
 }
 /*----*/
 .notify-arrow {
-  /*background: url("../images/top-arrow.png") no-repeat;*/
   width: 18px;
   height: 10px;
   margin-top: 0;
@@ -679,7 +647,6 @@ ul.top-menu > li > a:focus {
   transition: all .3s ease;
   border: 1px solid #fff;
   box-shadow: none;
-  background: #f6f6f6 url("../images/search-icon.png") no-repeat 10px 8px;
   padding: 0 5px 0 30px;
   color: #fff;
   border-radius: 100px;
@@ -3316,12 +3283,6 @@ select:focus:invalid:focus,
   padding: 10px 0 0 35px;
   color: #fff;
 }
-.blue-ribon {
-  /*background: url("../images/twitter_corner_blue.png") no-repeat;*/
-}
-.black-ribon {
-  /*background: url("../images/twitter_corner_black.png") no-repeat;*/
-}
 .twt-feed.blue-bg {
   background: #58C9F3;
 }
@@ -3680,9 +3641,6 @@ span.customSelect {
 }
 span.customSelect.changed {
   background-color: #fff;
-}
-.customSelectInner {
-  /*background: url(../images/customSelect-arrow.gif) no-repeat center right;*/
 }
 /*Timeline chat*/
 .chat-form {
@@ -4260,9 +4218,6 @@ tr.odd.gradeU td.sorting_1 {
   color: #757575;
 }
 /*lock screen*/
-.lock-screen {
-  /*background: #1FB3A3 url("../images/lock-screen.jpg") no-repeat fixed 0 0 / cover;*/
-}
 .lock-wrapper {
   margin: 10% auto;
   max-width: 500px;
@@ -4368,14 +4323,6 @@ tr.odd.gradeU td.sorting_1 {
 .language-menu {
   margin-top: 15px !important;
   padding: 0;
-}
-.lang-arrow-up {
-  /*background: url("../images/top-arrow.png") no-repeat;*/
-  width: 18px;
-  height: 10px;
-  margin-top: -15px;
-  float: right;
-  margin-right: 15px;
 }
 /*breadcrumbs-alt*/
 .breadcrumbs-alt {
