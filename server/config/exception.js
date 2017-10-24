@@ -3,7 +3,8 @@
  */
 
 var exception = {
-    serverNotRun: 'MongoDb server is not running'
+    serverNotRun: 'Connect to the server is failed',
+    noExistCallBack: 'This is does not callback'
 }
 
 
