@@ -17,11 +17,12 @@ var mongoController = function (res) {
     this.dbConnectionString = 'mongodb://localhost:' + nconf.get('portDb') +'/'+ nconf.get('db');
     this.response = res ? res : null;
 
-    this.emitter = new EventEmitter();
-    this.emitters();
+    this.emitters(new EventEmitter());
 };
 
-mongoController.prototype.emitters = function () {
+mongoController.prototype.emitters = function (instanceEmmiter) {
+    this.emitter = instanceEmmiter;
+
     var _this = this;
 
     this.emitter.on('serverNotRun', function (data) {
@@ -44,10 +45,10 @@ mongoController.prototype.install = function () {
             _this.response.writeHead(200);
             _this.response.end(JSON.stringify(data));
         }
-
     });
 
     this.emitter.on('tablesIsCreated', function (data) {
+        data.message = enumMessage.tablesIsCreated;
         _this.response.writeHead(200);
         _this.response.end(JSON.stringify(data));
     });
@@ -82,12 +83,12 @@ mongoController.prototype.createTables = function (db) {
         } else {
             if (collections.length) {
                 data.status = false;
-                data.message = 'The tables there is in base data';
+                data.message = enumMessage;
                 _this.emitter.emit('error', data);
             } else {
                 data.status = true;
                 for (var i=0; i<=_this.tables.length; i++) {
-                    db.createCollection(object.tables[i]); // TODO: not working
+                    db.createCollection(_this.tables[i]); // TODO: not working
                 }
                 _this.emitter.emit('tablesIsCreated', data);
             }
@@ -138,8 +139,20 @@ mongoController.prototype.get = function (entity, callback) {
     })
 }
 
+mongoController.prototype.objectNotNull = function (json) {
+    var object = {};
+    for (key in json) {
+        if (json[key] != null) {
+            object[key] = json[key];
+        }
+    }
+    return object;
+};
+
 mongoController.prototype.save = function (entity, json, callback) {
     var _this = this;
+
+    json = this.objectNotNull(json);
 
     this.connectToDB(entity, function (data) {
         var _data = {};
