@@ -4,7 +4,7 @@ module.exports = function (app) {
     app.get('/users', function (req, res) {
         (new userController(res)).get();
     });
-    app.get('/users/get/:id', function (req, res) {
+    app.get('/users/:id', function (req, res) {
         (new userController(res)).getById(req.params.id);
     });
 
