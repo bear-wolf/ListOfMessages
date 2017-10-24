@@ -1,26 +1,29 @@
 /**
  * Created by andrew on 2/1/17.
  */
+var nconf = require('nconf');
 
 module.exports = function (app) {
     require("./../module/translate/translate-routes")(app);
     require("./../module/user/user-routes")(app);
+    require("./../module/mongoDB/mongo-routes")(app);
+
+    new route(app);
 };
 
-var route = function () {}
+var route = function (app) {
+    this.init(app)
+}
 route.prototype.addHeader = function(res) {
-    res.setHeader('Access-Control-Allow-Origin', config.urlOfClient); // для кросдоменного звязку // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', nconf.get('urlOfClient')); // для кросдоменного звязку // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, content-type'); // Request headers you wish to allow
     res.setHeader('Access-Control-Allow-Credentials', true);
 }
-route.prototype.init = function () {
-    var mongoCtrl,
-        object = this;
+route.prototype.init = function (app) {
+    var object = this;
 
-    mongoCtrl = new mongoController(config);
-
-    object.app.use(function (req, res, next) {
+    app.use(function (req, res, next) {
         object.addHeader(res);
 
         if (req.method == 'OPTIONS') {
@@ -31,119 +34,17 @@ route.prototype.init = function () {
     });
 
     // GET method route
-    object.app.get('/', function (req, res) {
+    app.get('/', function (req, res) {
         res.send('GET request to the homepage, hello');
         res.end('');
     });
 
-    object.app.get('/install', function (req, res) {
-        mongoCtrl.setParams({
-            response: res
-        }).install();
-    });
-
-    /*users*/
-    object.app.get('/users', function (req, res) {
-        (new userController(res)).get();
-    });
-    object.app.get('/users/get/:id', function (req, res) {
-        (new userController(res)).getById(req.params.id);
-    });
-
-    object.app.post('/users/save', urlencodedParser, function (req, res) {
-        if (!req.body) {
-            return res.sendStatus(400);
-        }
-        (new userController(res)).save(req.body);
-    });
-    object.app.post('/users/remove', urlencodedParser, function (req, res) {
-        if (!req.body) {
-            return res.sendStatus(400);
-        }
-        (new userController(res)).remove(req.body);
-    });
-    //====================
-
-    // object.app.get('/login', function (req, res, next) {
-    //     if (req.query.email && req.query.password) {
-    //         (new mainController(res)).getCredentials(req.query);
-    //     }
-    //     next();
-    // });
-    // object.app.post('/logout', function (req, res) {
-    //     var data, index=-1;
-    //
-    //     data = {
-    //         status: false
-    //     }
-    //
-    //     if (process.token) {
-    //         index = process.token.indexOf(req.body.token)
-    //         if (index>=0) {
-    //             process.token.splice(index,1) // remove;
-    //             data.status = true;
-    //         }
-    //     }
-    //
-    //     res.statusCode = 200;
-    //     res.end(JSON.stringify(data));
-    // });
-    // object.app.post('/isAuth', function (req, res, next) {
-    //     var index, data;
-    //
-    //     data = {
-    //         status: false
-    //     }
-    //
-    //     if (process.token) {
-    //         index = process.token.indexOf(req.body.token)
-    //         if (index>=0) {
-    //             data.status = true;
-    //         }
-    //     }
-    //
-    //     res.statusCode = 200;
-    //     res.end(JSON.stringify(data));
-    // });
-
-
-    // object.app.get('/users', function (req, res) {
-    //     (new mainController(res)).get();
-    // });
-    // object.app.all('/users/:id', function (req, res, next) {
-    //     switch (req.method) {
-    //         case 'PUT':
-    //         case 'POST': {
-    //             (new mainController(res)).save(req.body);
-    //             break;
-    //         }
-    //         case 'GET': {
-    //             (new mainController(res)).getById(req.url.substring(req.url.lastIndexOf('/')+1));
-    //             break;
-    //         }
-    //         case 'DELETE': {
-    //             (new mainController(res)).removeById(req.url.substring(req.url.lastIndexOf('/')+1));
-    //             break
-    //         }
-    //         default: {
-    //             next(); // pass control to the next handler
-    //             break;
-    //         }
-    //     }
-    // });
-    //
-    // object.app.post('/users', function (req, res) {
-    //     (new mainController(res)).save(req.body);
-    // });
-
-
-
-    this.app.use(function (req, res) {
+    app.use(function (req, res) {
         res.statusCode = 404;
         res.end('Page no found');
     });
 
-    this.app.use(function(err, req, res, next) {
+    app.use(function(err, req, res, next) {
         if (err) {
             res.statusCode = 500;
             console.error(err.stack);

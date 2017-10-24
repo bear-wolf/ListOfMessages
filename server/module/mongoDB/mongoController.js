@@ -1,67 +1,103 @@
 var MongoClient = require('mongodb').MongoClient,
     nconf = require('nconf'),
-    exception = require('./../config/exception'),
-    enumMessage = require('./../config/message'),
+    exception = require('./../../config/exception'),
+    enumMessage = require('./../../config/message'),
     _ = require('underscore'),
     mongodb = require('mongodb'),
     Server = require('mongodb').Server;
 
+const EventEmitter = require('events');
 
-var mongoController = function () {
+
+var mongoController = function (res) {
     this.client = MongoClient;
     this.exception = exception;
     this.tables = ['translate', 'attachment', 'user', 'message'];
     this.mongodb = mongodb;
+    this.dbConnectionString = 'mongodb://localhost:' + nconf.get('portDb') +'/'+ nconf.get('db');
+    this.response = res ? res : null;
+
+    this.emitter = new EventEmitter();
+    this.emitters();
 };
 
-mongoController.prototype.setParams = function (data) {
-    this.response = data.response;
-    return this;
+mongoController.prototype.emitters = function () {
+    var _this = this;
+
+    this.emitter.on('serverNotRun', function (data) {
+        data.status = false;
+        data.message = exception.serverNotRun;
+    });
+    this.emitter.on('error', function (data) {
+        data.status = false;
+        _this.response.writeHead(500);
+        _this.response.end(JSON.stringify(data));
+    });
 }
 mongoController.prototype.install = function () {
-    var data = {
-            status: false
-        };
+    var _this = this;
 
-    if (this.createDataBase()) {
-        data = this.createTables();
-    }
+    this.emitter.on('dataBaseIsCreated', function (data) {
+        if (data.status) {
+            _this.createTables(data.db);
+        } else {
+            _this.response.writeHead(200);
+            _this.response.end(JSON.stringify(data));
+        }
 
-    this.response.writeHead(200);
-    this.response.end(JSON.stringify(data));
+    });
+
+    this.emitter.on('tablesIsCreated', function (data) {
+        _this.response.writeHead(200);
+        _this.response.end(JSON.stringify(data));
+    });
+
+    this.createDataBase();
 }
 
 mongoController.prototype.createDataBase = function () {
-    return this.connect() ? true : false;
-}
+    var _this = this;
 
-mongoController.prototype.createTables = function () {
-    var data = {},
-        object = this;
+    this.client.connect(this.dbConnectionString, function(err, database) {
+        var data = {};
 
-    this.db.listCollections().toArray(function(err, collections){
-        if (err) {
-            data.status = false;
-            object.resource.writeHead(404);
-            object.resource.end(JSON.stringify(data));
-        }
-
-        if (collections.length) {
-            data.status = false;
-            data.message = 'The tables there is in base data';
+        if(err) {
+            _this.emitter.emit('serverNotRun', err);
         } else {
             data.status = true;
-            for (var i=0; i<=object.tables.length; i++) {
-                object.db.createCollection(object.tables[i]);
+            data.db = database;
+            _this.emitter.emit('dataBaseIsCreated', data);
+        }
+    })
+}
+
+mongoController.prototype.createTables = function (db) {
+    var _this = this;
+
+    db.listCollections().toArray(function(err, collections){
+        var data = {};
+
+        if (err) {
+            _this.emitter.emit('error', err);
+        } else {
+            if (collections.length) {
+                data.status = false;
+                data.message = 'The tables there is in base data';
+                _this.emitter.emit('error', data);
+            } else {
+                data.status = true;
+                for (var i=0; i<=_this.tables.length; i++) {
+                    db.createCollection(object.tables[i]); // TODO: not working
+                }
+                _this.emitter.emit('tablesIsCreated', data);
             }
         }
-
-        return data;
+        return;
     });
 }
 
 mongoController.prototype.connectToDB = function (entity, callback) {
-    this.client.connect('mongodb://localhost:' + nconf.get('portDb') +'/'+ nconf.get('db'), function(err,database) {
+    this.client.connect(this.dbConnectionString, function(err,database) {
         var data = {};
 
         if(err) {

@@ -1,4 +1,4 @@
-var mongoController = require('./mongoController.js');
+var mongoController = require('./../module/mongoDB/mongoController.js');
 
 var baseController = function () {
     this.db = (new mongoController);
