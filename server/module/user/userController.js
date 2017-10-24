@@ -54,8 +54,9 @@ userController.prototype.save = function (json) {
     user.dataCreate = json.dataCreate ? json.dataCreate : null;
     user.dataUpdate = json.dataUpdate ? json.dataUpdate : null;
     user.attachmentId = json.attachmentId ? json.attachmentId : null;
+    user._id = json.id ? json.id : null;
 
-    this.db.save(_this.entity, json, function (data) {
+    this.db.save(_this.entity, user, function (data) {
         if (data.error) {
             _this.emitter.emit('error', data);
         } else {

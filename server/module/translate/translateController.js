@@ -1,34 +1,67 @@
 var util = require('util'),
+    exception = require('../../config/exception'),
+    message = require('../../config/message'),
+    Translate = require('./translate-model'),
     baseCtrl = require('../../controller/baseController');
 
-var translateController = function (resource) {
+const EventEmitter = require('events');
+
+var translateController = function (response) {
     translateController.super_.apply(this, arguments);
-    this.resource = resource;
+    this.response = response;
     this.entity = 'translate';
+    this.emitters(new EventEmitter());
 }
 
 util.inherits(translateController, baseCtrl);
 
 translateController.prototype.index = function () {
-    this.resource.writeHead(200);
+    this.response.writeHead(200);
     // this.resource.end('this is index page');
 }
 
-translateController.prototype.save = function (json) {
+translateController.prototype.emitters = function (instanceEmmiter) {
+    this.emitter = instanceEmmiter;
+
     var _this = this;
 
-    this.db.save(_this.entity, json, function (data) {
-        var _data = {
-            message : data.message
-        };
+    this.emitter.on('serverNotRun', function (data) {
+        data.status = false;
+        data.message = exception.serverNotRun;
+    });
+    this.emitter.on('error', function (data) {
+        data.status = false;
+        _this.response.writeHead(500);
+        _this.response.end(JSON.stringify(data));
+    });
 
+    this.emitter.on('result', function (data) {
+        var _data = {};
+
+        _data.status = true;
+        _data.body = data.body;
+        _data.message = data.message;
+        _data.count = data.count;
+
+        _this.response.writeHead(200);
+        _this.response.end(JSON.stringify(_data));
+    });
+}
+
+translateController.prototype.save = function (json) {
+    var _this = this,
+        translate = new Translate(json.key, json.value);
+
+    translate.dataCreate = json.dataCreate ? json.dataCreate : null;
+    translate.dataUpdate = json.dataUpdate ? json.dataUpdate : null;
+    translate._id = json.id ? json.id : null;
+
+    this.db.save(_this.entity, translate, function (data) {
         if (data.error) {
-            _data.status = false;
-
+            _this.emitter.emit('error', data);
         } else {
-            _data.status = true;
+            _this.emitter.emit('result', data);
         }
-        _this.resource.end(JSON.stringify(_data));
     });
 }
 
@@ -36,17 +69,11 @@ translateController.prototype.get = function () {
     var _this = this;
 
     this.db.get(_this.entity, function (data) {
-        var _data = {};
-
         if (data.error) {
-            _data.status = false;
-            _data.message = data.message;
+            _this.emitter.emit('error', data);
         } else {
-            _data.status = true;
-            _data.body = data.body;
-            _data.count = data.count;
+            _this.emitter.emit('result', data);
         }
-        _this.resource.end(JSON.stringify(_data));
     });
 }
 
@@ -54,17 +81,11 @@ translateController.prototype.getById = function (id) {
     var _this = this;
 
     this.db.getById(_this.entity, id, function (data) {
-        var _data = {};
-
-        if (!data.status) {
-            _data.status = false;
+        if (data.error) {
+            _this.emitter.emit('error', data);
         } else {
-            _data.status = true;
-            _data.body = data.body;
-            _data.count = data.count;
+            _this.emitter.emit('result', data);
         }
-
-        _this.resource.end(JSON.stringify(_data));
     })
 }
 
@@ -74,9 +95,9 @@ translateController.prototype.remove = function (json) {
 
     this.db.remove(this.entity, json, function (data) {
         if (!data.status) {
-            _this.resource.end(data);
+            _this.emitter.emit('error', data);
         } else {
-            _this.resource.end(JSON.stringify(data));
+            _this.emitter.emit('result', data);
         }
     });
 }
