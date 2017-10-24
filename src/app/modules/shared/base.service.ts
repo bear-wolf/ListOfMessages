@@ -59,7 +59,7 @@ export class BaseService {
 
     headers.append('Accept-Language', 'uk');
 
-    return this.http.get(`${this.host}/translate`, {
+    return this.http.get(`${this.host}/translate/all`, {
           headers: headers
         })
         .map(res => {
