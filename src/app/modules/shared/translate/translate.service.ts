@@ -26,13 +26,10 @@ export class TranslateService  {
 
         this.host = environment.host;
 
-        // this.storeAsObservable = new Observable(observer=>{
-        //
-        // })
-
         this.baseService.getTranslateAll().subscribe((data) => {
-            if (data.length) {
-                this._translations.ua = data.json();
+            if (data.count) {
+                this._translations.ua = data.body;
+                this.use('ua');
             }
         });
     }
@@ -89,9 +86,9 @@ export class TranslateService  {
   for(let key in translate){
       params.set(key, translate[key])
   }
-debugger;
+
   let options = new RequestOptions({ headers: headers});
-  return this.http.post(this.host + '/translate/save', params, options)
+  return this.http.post(`${this.host}/translate/save`, params, options)
         .map(res => {
           return res.json();
         })
@@ -106,7 +103,7 @@ debugger;
     headers.append('Accept', '*/*');
 
     let options = new RequestOptions({ headers: headers});
-    return this.http.get(this.host + '/translate', options)
+    return this.http.get(`${this.host}/translate`, options)
         .map(res => {
           return res.json();
         })
@@ -121,7 +118,7 @@ debugger;
         headers.append('Accept', '*/*');
 
         let options = new RequestOptions({ headers: headers});
-        return this.http.get(this.host + '/translate/get/' + id, options)
+        return this.http.get(`${this.host}/translate/get/${id}`, options)
             .map(res => {
                 return res.json();
             })
@@ -139,7 +136,7 @@ debugger;
     params.set('id', id);
 
     let options = new RequestOptions({ headers: headers});
-    return this.http.post(this.host + '/translate/remove', params, options)
+    return this.http.post(`${this.host}/translate/remove`, params, options)
         .map(res => {
           return res.json();
         })

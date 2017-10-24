@@ -59,27 +59,15 @@ export class BaseService {
 
     headers.append('Accept-Language', 'uk');
 
-    // return this.http.get(this.host + '/translate', {
-    //   headers: headers
-    // });
-
-    return Observable.of([]);
-  }
-
-  getContent(key: string) {
-    let headers = new Headers();
-
-    headers.append('Accept', 'application/json');
-
-    return this.http.get(this.host + '/content-pages/' + key, {
+    return this.http.get(`${this.host}/translate`, {
           headers: headers
         })
         .map(res => {
-          return res.json();
+            return res.json();
         })
         .catch((error: any) => {
-          return Observable.throw(error);
-        })
+            return Observable.throw(error);
+        });
   }
 
 }

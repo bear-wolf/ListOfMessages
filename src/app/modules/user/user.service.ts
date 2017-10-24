@@ -26,7 +26,7 @@ export class UserService extends BaseService {
               headers: headers
           });
 
-      return this.http.post(this.host + '/save', params, options)
+      return this.http.post(`${this.host}/save`, params, options)
           .map(res => {
               return res.json();
           })
@@ -56,7 +56,7 @@ export class UserService extends BaseService {
       headers.append('Accept', '*/*');
 
       let options = new RequestOptions({ headers: headers});
-      return this.http.get(this.host + '/get/' + id, options)
+      return this.http.get(`${this.host}/${id}` , options)
           .map(res => {
               return res.json();
           })
@@ -75,7 +75,7 @@ export class UserService extends BaseService {
       });
 
       let options = new RequestOptions({ headers: headers});
-      return this.http.post(this.host + '/remove', params, options)
+      return this.http.post(`${this.host}/remove`, params, options)
           .map(res => {
               return res.json();
           })
