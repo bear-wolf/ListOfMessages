@@ -28,9 +28,13 @@ mongoController.prototype.emitters = function (instanceEmmiter) {
     this.emitter.on('serverNotRun', function (data) {
         data.status = false;
         data.message = exception.serverNotRun;
+
+        _this.response.writeHead(500);
+        _this.response.end(JSON.stringify(data));
     });
     this.emitter.on('error', function (data) {
         data.status = false;
+
         _this.response.writeHead(500);
         _this.response.end(JSON.stringify(data));
     });
@@ -69,6 +73,8 @@ mongoController.prototype.createDataBase = function () {
             data.db = database;
             _this.emitter.emit('dataBaseIsCreated', data);
         }
+
+        return
     })
 }
 

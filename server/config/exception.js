@@ -4,7 +4,8 @@
 
 var exception = {
     serverNotRun: 'Connect to the server is failed',
-    noExistCallBack: 'This is does not callback'
+    noExistCallBack: 'This is does not callback',
+    serverIsNotResponding: 'Server is not responding'
 }
 
 
