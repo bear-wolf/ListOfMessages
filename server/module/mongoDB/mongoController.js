@@ -104,12 +104,15 @@ mongoController.prototype.createTables = function (db) {
 }
 
 mongoController.prototype.connectToDB = function (entity, callback) {
+    var _this = this;
+
     this.client.connect(this.dbConnectionString, function(err,database) {
         var data = {};
 
         if(err) {
-            data.status = false;
-            data.message = exception.serverNotRun;
+            _this.emitter.emit('error', {
+                status: false
+            });
         } else {
             data.status = true;
             data.db = database;
@@ -125,12 +128,11 @@ mongoController.prototype.connectToDB = function (entity, callback) {
 }
 
 mongoController.prototype.get = function (entity, callback) {
-    this.connectToDB(entity, function (data) {
-        var _data = {};
+    var _this = this;
 
+    this.connectToDB(entity, function (data) {
         if (!data.status) {
-            _data.status = false;
-            callback(data);
+            _this.emitter.emit('error', data);
             return;
         }
         data.collection.find().toArray(function(err, docs) {
@@ -161,11 +163,8 @@ mongoController.prototype.save = function (entity, json, callback) {
     json = this.objectNotNull(json);
 
     this.connectToDB(entity, function (data) {
-        var _data = {};
-
         if (!data.status) {
-            _data.status = false;
-            callback(data);
+            _this.emitter.emit('error', data);
             return;
         }
 
@@ -209,24 +208,21 @@ mongoController.prototype.remove = function (entity, json, callback) {
             callback(data);
         }
         else {
-            data.collection.deleteOne({
-                    _id: new _this.mongodb.ObjectID(json.id)
-                },
-                function (err, result) {
-                    if (err) {
-                        _data.status = false;
-                    } else{
-                        _data.status = true;
-                        _data.message = enumMessage.removeSuccessful;
-                    }
+            data.collection.remove({
+                _id: new _this.mongodb.ObjectID(json.id)
+            }, function (err, result) {
+                if (err) {
+                    _data.status = false;
+                } else{
+                    _data.status = true;
+                    _data.message = enumMessage.removeSuccessful;
+                }
 
-                    if (_.isFunction(callback)) {
-                        callback(_data);
-                    }
-                });
+                if (_.isFunction(callback)) {
+                    callback(_data);
+                }
+            })
         }
-
-
     })
 }
 
