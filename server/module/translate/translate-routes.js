@@ -6,8 +6,8 @@ module.exports = function (app) {
         (new translateController(res)).get();
     });
 
-    app.get('/translate/get/:id', function (req, res) {
-        (new translateController(res)).getById(req.params.id);
+    app.get('/translate/all', function (req, res) {
+        (new translateController(res)).getToPipe();
     });
 
     app.post('/translate/save', function (req, res) {
@@ -21,6 +21,10 @@ module.exports = function (app) {
             return res.sendStatus(400);
         }
         (new translateController(res)).remove(req.body);
+    });
+
+    app.get('/translate/:id', function (req, res) {
+        (new translateController(res)).getById(req.params.id);
     });
     //=====================
 }

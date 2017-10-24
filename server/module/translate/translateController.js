@@ -65,6 +65,24 @@ translateController.prototype.save = function (json) {
     });
 }
 
+translateController.prototype.getToPipe = function () {
+    var _this = this;
+
+    this.db.get(_this.entity, function (data) {
+        if (data.error) {
+            _this.emitter.emit('error', data);
+        } else {
+            var o = {}
+
+            data.body.forEach(function callback(data, index, array) {
+                o[data.key] = data.value;
+            });
+            data.body = o;
+            _this.emitter.emit('result', data);
+        }
+    });
+}
+
 translateController.prototype.get = function () {
     var _this = this;
 
